@@ -271,9 +271,9 @@ img { max-width: 100%; display: block; }
 }
 
 .categories {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .category-section {
@@ -467,6 +467,26 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--line);
   border-radius: 14px;
   padding: 0 14px;
+}
+
+.floating-whatsapp {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25d366, #1faa57);
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 20px 35px rgba(37, 211, 102, 0.35);
+  z-index: 1000;
+  font-size: 28px;
+}
+
+.floating-whatsapp:hover {
+  transform: translateY(-2px);
 }
 
 .products {
