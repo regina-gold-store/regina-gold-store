@@ -617,7 +617,10 @@ function buildTelegramMessage(data) {
   lines.push(`• طريقة الدفع: ${data.payment || '—'}`, `• الملاحظات: ${data.notes || '—'}`, '', '💎 الطلب:');
 
   data.items.forEach((item, index) => {
-    lines.push(`${index + 1}. ${item.name} — ${money(salePrice(item))} × ${item.qty || 1}`);
+    const price = salePrice(item);
+    const qty = Number(item.qty || 1);
+    const idLabel = item.id || 'غير محدد';
+    lines.push(`${index + 1}. ${item.name} | رقم المنتج: ${idLabel} | الكمية: ${qty} | السعر: ${money(price)} | الإجمالي: ${money(price * qty)}`);
   });
 
   lines.push('', '━━━━━━━━━━━━━━━━━━', `المجموع: ${money(data.total || 0)}`);
