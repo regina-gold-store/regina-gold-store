@@ -1,0 +1,19 @@
+{
+  "id": "ingots-800",
+  "name": "regina gold 1g",
+  "carat": "24",
+  "price": 8000,
+  "salePrice": 7800,
+  "saleEnds": "",
+  "manufacturing": 2026,
+  "weight": "1",
+  "availability": "متوفر",
+  "shipping": "متوفر شحن",
+  "customOrder": true,
+  "description": "rogina vip",
+  "category": "ingots",
+  "image": "products/ingots/800/1787934296125-57045519-191a-4eb7-b04f-8ed90432a6a1.png",
+  "images": [
+    "products/ingots/800/1787934296125-57045519-191a-4eb7-b04f-8ed90432a6a1.png"
+  ]
+}
