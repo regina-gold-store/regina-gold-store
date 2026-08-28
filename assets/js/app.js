@@ -226,9 +226,14 @@ function renderCategories(categories) {
   currentCategories = Array.isArray(categories) ? categories : [];
   const icons = ['fa-solid fa-ring', 'fa-solid fa-link', 'fa-solid fa-gem', 'fa-regular fa-gem', 'fa-solid fa-layer-group', 'fa-solid fa-star', 'fa-solid fa-bars-staggered', 'fa-solid fa-coins', 'fa-solid fa-heart', 'fa-regular fa-clock'];
 
-  container.innerHTML = currentCategories.map((category, index) => {
-    const count = all.filter((product) => product.category === category.id).length;
-    const items = all.filter((product) => product.category === category.id).slice(0, 6);
+  const populatedCategories = currentCategories.filter((category) => {
+    return all.some((product) => product.category === category.id);
+  });
+
+  container.innerHTML = populatedCategories.map((category, index) => {
+    const categoryProducts = all.filter((product) => product.category === category.id);
+    const count = categoryProducts.length;
+    const items = categoryProducts.slice(0, 6);
 
     return `
       <section class="category-section reveal" data-cat-block="${category.id}">
