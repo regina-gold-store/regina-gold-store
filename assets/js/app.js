@@ -243,7 +243,7 @@ function renderCategories(categories) {
   });
 
   container.innerHTML = populatedCategories.map((category, index) => {
-    const categoryProducts = all.filter((product) => product.category === category.id);
+    const categoryProducts = [...all.filter((product) => product.category === category.id)].reverse();
     const count = categoryProducts.length;
     const items = categoryProducts.slice(0, 6);
 
@@ -370,7 +370,7 @@ function renderCategoryPage() {
   const params = new URLSearchParams(window.location.search);
   const categoryId = params.get('cat') || '';
   const category = currentCategories.find((item) => item.id === categoryId) || { name: 'الفئة' };
-  const items = all.filter((product) => product.category === categoryId);
+  const items = [...all.filter((product) => product.category === categoryId)].reverse();
 
   pageTitle.textContent = category.name;
   if (!items.length) {
