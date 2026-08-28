@@ -131,5 +131,27 @@
     "images": [
       "products/ingots/800/1787934296125-57045519-191a-4eb7-b04f-8ed90432a6a1.png"
     ]
+  },
+  {
+    "id": "italian-gold-900",
+    "name": "خاتم بحجر زركون فاخر",
+    "carat": "18",
+    "price": 11600,
+    "salePrice": 11400,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "1.9",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "Regina vip",
+    "category": "italian-gold",
+    "image": "products/italian-gold/900/1787949106996-1F5B7938-A8A4-4527-9162-88635EDE2EC7.jpeg",
+    "images": [
+      "products/italian-gold/900/1787949106996-1F5B7938-A8A4-4527-9162-88635EDE2EC7.jpeg",
+      "products/italian-gold/900/1787949110634-1F5B7938-A8A4-4527-9162-88635EDE2EC7.jpeg",
+      "products/italian-gold/900/1787949113842-1F5B7938-A8A4-4527-9162-88635EDE2EC7.jpeg",
+      "products/italian-gold/900/1787949117529-CD696DF8-B08E-47C7-A6B3-37A23152D926.png"
+    ]
   }
 ]
