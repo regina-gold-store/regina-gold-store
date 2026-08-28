@@ -444,31 +444,61 @@ function renderCategoryPage() {
   });
 }
 
+function updateSearchSuggestions() {
+  const searchInput = $('#search');
+  const suggestionsBox = $('#searchSuggestions');
+  if (!searchInput || !suggestionsBox) return;
+
+  const term = searchInput.value.trim().toLowerCase();
+  if (!term) {
+    suggestionsBox.innerHTML = '';
+    suggestionsBox.classList.remove('show');
+    return;
+  }
+
+  const matches = all.filter((product) => {
+    const haystack = `${product.name || ''} ${product.description || ''}`.toLowerCase();
+    return haystack.includes(term);
+  }).slice(0, 6);
+
+  if (!matches.length) {
+    suggestionsBox.innerHTML = '<div class="suggestion-empty">لا توجد نتائج</div>';
+    suggestionsBox.classList.add('show');
+    return;
+  }
+
+  suggestionsBox.innerHTML = matches.map((product) => `
+    <button type="button" class="search-suggestion" data-product-id="${product.id}">
+      ${product.name}
+    </button>
+  `).join('');
+  suggestionsBox.classList.add('show');
+
+  suggestionsBox.querySelectorAll('.search-suggestion').forEach((button) => {
+    button.onclick = () => {
+      const selected = all.find((item) => item.id === button.dataset.productId);
+      if (selected) {
+        showDetail(selected);
+        searchInput.value = selected.name;
+        suggestionsBox.classList.remove('show');
+      }
+    };
+  });
+}
+
 function filterProducts() {
   const search = $('#search')?.value.toLowerCase() || '';
-  const category = $('#categoryFilter')?.value || '';
-  const carat = $('#caratFilter')?.value || '';
-  const priceRange = $('#priceFilter')?.value || '';
 
   let filtered = all.filter((product) => {
     const text = `${product.name || ''} ${product.description || ''}`.toLowerCase();
-    let valid = text.includes(search);
-    if (category && product.category !== category) valid = false;
-    if (carat && product.carat !== carat) valid = false;
-
-    if (priceRange) {
-      const [min, max] = priceRange.split('-').map(Number);
-      const value = salePrice(product);
-      valid = valid && value >= min && (Number.isNaN(max) || value <= max);
-    }
-
-    return valid;
+    return text.includes(search);
   });
 
   const resultText = $('#resultText');
   if (resultText) resultText.textContent = `${filtered.length} قطعة متاحة`;
 
   renderProducts(filtered);
+  updateSearchSuggestions();
 }
 
 function addToCart(id) {
@@ -701,32 +731,23 @@ async function init() {
 
   currentCategories = categories;
 
-  const categoryFilter = $('#categoryFilter');
-  const caratFilter = $('#caratFilter');
-  if (categoryFilter) {
-    categoryFilter.innerHTML = '<option value="">كل الفئات</option>' + categories.map((category) => `<option value="${category.id}">${category.name}</option>`).join('');
-  }
-
-  if (caratFilter) {
-    const carats = [...new Set(all.map((product) => product.carat).filter(Boolean))];
-    caratFilter.innerHTML = '<option value="">كل العيارات</option>' + carats.map((value) => `<option value="${value}">${value}</option>`).join('');
-  }
-
   renderCategories(categories);
   renderReviews();
   renderCategoryPage();
   filterProducts();
   renderCart();
 
-  ['search', 'categoryFilter', 'caratFilter', 'priceFilter'].forEach((id) => {
-    const element = $('#' + id);
-    if (element) element.oninput = filterProducts;
-  });
-
-  const filterToggle = $('#filterToggle');
-  const filterPanel = $('#filterPanel');
-  if (filterToggle && filterPanel) {
-    filterToggle.onclick = () => filterPanel.classList.toggle('open');
+  const searchInput = $('#search');
+  if (searchInput) {
+    searchInput.oninput = filterProducts;
+    searchInput.onfocus = updateSearchSuggestions;
+    document.addEventListener('click', (event) => {
+      const suggestions = $('#searchSuggestions');
+      if (!suggestions) return;
+      if (!event.target.closest('.header-search-wrap') && !event.target.closest('.search-suggestion')) {
+        suggestions.classList.remove('show');
+      }
+    });
   }
 
   const themeButton = $('#theme');

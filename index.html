@@ -34,6 +34,11 @@
       <a href="#contact">الفروع</a>
     </nav>
 
+    <div class="header-search-wrap">
+      <input id="search" class="header-search" type="search" placeholder="ابحثي عن منتجك المفضل..." aria-label="بحث">
+      <div id="searchSuggestions" class="search-suggestions"></div>
+    </div>
+
     <div class="header-actions">
       <button class="icon-btn theme-btn" id="theme" aria-label="تبديل المظهر"><i class="fa-solid fa-moon"></i></button>
       <button class="icon-btn cart-btn" id="cartButton" aria-label="السلة"><i class="fa-solid fa-bag-shopping"></i> <b id="cartCount">0</b></button>
@@ -81,50 +86,15 @@
         </div>
       </div>
 
-      <div class="shop-tools">
-        <button class="filter-toggle" id="filterToggle" type="button">تصفية <i class="fa-solid fa-sliders"></i></button>
-        <div class="controls" id="filterPanel">
-          <input class="control" id="search" placeholder="ابحثي باسم القطعة أو الوصف">
-          <select class="control" id="categoryFilter">
-            <option value="">كل الفئات</option>
-          </select>
-          <select class="control" id="caratFilter">
-            <option value="">كل العيارات</option>
-          </select>
-          <select class="control" id="priceFilter">
-            <option value="">كل الأسعار</option>
-            <option value="0-3000">حتى 3000</option>
-            <option value="3000-8000">3000 – 8000</option>
-            <option value="8000-15000">8000 – 15000</option>
-            <option value="15000-999999">أكثر من 15000</option>
-          </select>
-        </div>
-      </div>
-
       <div class="products" id="products"></div>
     </section>
 
-    <section class="container perks reveal">
-      <div class="perk">
-        <span><i class="fa-solid fa-shield-heart"></i></span>
-        <h3>منتجات أصلية</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-truck-fast"></i></span>
-        <h3>شحن سريع</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-wallet"></i></span>
-        <h3>دفع آمن</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-gem"></i></span>
-        <h3>تخصيص فريد</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-sparkles"></i></span>
-        <h3>متاح صيانه وتلميع</h3>
-      </div>
+    <section class="container experiences reveal">
+      <div class="experience-item">توصيل لحد باب المنزل</div>
+      <div class="experience-item">تجهيز هدايا بأسلوب فاخر</div>
+      <div class="experience-item">متاح صيانة وتلميع مستمر</div>
+      <div class="experience-item">خدمة تخصيص فريدة حسب ذوقك</div>
+      <div class="experience-item">دفع آمن وطلب سريع</div>
     </section>
 
     <section class="container reveal" id="reviews">
