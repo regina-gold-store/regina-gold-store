@@ -293,9 +293,13 @@ function renderCategories(categories) {
 function renderProducts(items) {
   const productsRoot = $('#products');
   if (!productsRoot) return;
-  productsRoot.innerHTML = '';
-  return;
-}
+
+  if (!items.length) {
+    productsRoot.innerHTML = '<div class="empty">لا توجد قطع مطابقة للبحث.</div>';
+    return;
+  }
+
+  productsRoot.innerHTML = items.map((product) => {
     const normalized = normalizeProduct(product);
     const images = productImages(normalized);
     const price = salePrice(normalized);

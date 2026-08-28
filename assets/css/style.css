@@ -469,10 +469,6 @@ img { max-width: 100%; display: block; }
   padding: 0 14px;
 }
 
-#shop {
-  display: none !important;
-}
-
 .products {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
