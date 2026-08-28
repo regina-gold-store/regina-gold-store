@@ -146,6 +146,11 @@ function readProductsLocal() {
 
 function persistProductsLocal(list) {
   const normalized = Array.isArray(list) ? list : [];
+  if (!normalized.length) {
+    window.dispatchEvent(new CustomEvent('regina-products-updated', { detail: [] }));
+    return;
+  }
+
   window.dispatchEvent(new CustomEvent('regina-products-updated', { detail: normalized }));
 
   if ('BroadcastChannel' in window) {

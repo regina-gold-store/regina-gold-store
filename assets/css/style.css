@@ -970,10 +970,17 @@ img { max-width: 100%; display: block; }
     gap: 10px;
     padding-top: 8px;
     padding-bottom: 8px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
   }
   .top-inner { justify-content: center; }
-  .header-search-wrap { order: 3; width: 100%; max-width: none; }
+  .header-search-wrap {
+    grid-column: 1 / -1;
+    order: 3;
+    width: 100%;
+    max-width: none;
+  }
   .header-actions { margin-inline-start: auto; }
   .card img { height: clamp(200px, 42vw, 260px); }
   .card-body { padding: 14px; }

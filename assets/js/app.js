@@ -678,7 +678,12 @@ $('#orderForm').onsubmit = async (event) => {
 
 function reloadCatalogFromStorage() {
   fetch('assets/data/products.json', { cache: 'no-store' })
-    .then((response) => response.ok ? response.json() : [])
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Products catalog not available');
+      }
+      return response.json();
+    })
     .then((data) => {
       all = normalizeCatalog(data);
       if (currentCategories.length) {
@@ -707,9 +712,9 @@ async function init() {
   const fetchedProducts = productsResponse.ok ? await productsResponse.json() : [];
 
   all = normalizeCatalog(Array.isArray(fetchedProducts) ? fetchedProducts : []);
-  currentCategories = categories;
+  currentCategories = Array.isArray(categories) ? categories : [];
 
-  renderCategories(categories);
+  renderCategories(currentCategories);
   renderCategoryPage();
   filterProducts();
   renderCart();
