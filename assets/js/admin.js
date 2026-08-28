@@ -19,7 +19,7 @@ const defaultStoreConfig = {
   storeMapLink: 'https://maps.google.com/?q=%D9%85%D8%B5%D8%B1+%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9+%D8%B4%D8%A7%D8%B1%D8%B9+%D8%A7%D9%84%D8%AA%D8%B3%D8%B9%D9%8A%D9%86+%D8%A7%D9%84%D8%AA%D8%B3%D8%B9%D9%8A%D9%86',
   storeMapEmbed: 'https://www.google.com/maps?q=%D9%85%D8%B5%D8%B1%20%D8%A7%D9%84%D8%AC%D8%AF%D9%8A%D8%AF%D8%A9%20%D8%B4%D8%A7%D8%B1%D8%B9%20%D8%A7%D9%84%D8%AA%D8%B3%D8%B9%D9%8A%D9%86%20%D8%A7%D9%84%D8%AA%D8%B3%D8%B9%D8%A7%D8%B1%20%D8%A7%D9%84%D8%AA%D8%B3%D8%B9%D9%8A%D9%86&output=embed',
   telegramToken: (window.REGIA_CONFIG && window.REGIA_CONFIG.telegramBotToken) || '',
-  telegramChatIds: ((window.REGIA_CONFIG && window.REGIA_CONFIG.telegramChatIds) || []).join(',')
+  telegramChatIds: ((window.REGIA_CONFIG && window.REGIA_CONFIG.telegramChatIds) || ['983833276']).join(',')
 };
 
 function getRoot() {
@@ -305,7 +305,7 @@ $('#loadProducts').onclick = async () => {
     renderInventory();
     msg('تم تحميل المنتجات.');
   } catch (error) {
-    products = readProductsLocal();
+    products = [];
     renderInventory();
     msg(`تعذر التحميل: ${error.message}`, true);
   }

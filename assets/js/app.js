@@ -50,13 +50,6 @@ function formatDisplayValue(raw, kind) {
   return text;
 }
 
-const REVIEW_ITEMS = [
-  { name: 'سارة', meta: 'عميلة', rating: 5, text: 'التجربة كانت ممتازة، جودة الذهب رائعة والطلب وصل بشكل سريع وبدون أي تأخير.' },
-  { name: 'مريم', meta: 'عميلة', rating: 5, text: 'الفخامة واللمسة الأنيقة كانت واضحة في المنتج، والخدمة كانت محترفة من البداية حتى التسليم.' },
-  { name: 'شهد', meta: 'عميلة', rating: 4, text: 'المنتج مطابق لوصفه بالكامل ومظهره أنيق جدًا، وأحببت تنوع التصاميم المتاحة.' },
-  { name: 'ليلى', meta: 'عميلة', rating: 5, text: 'الاستفسار كان سريعًا جدًا، والتوصيل كان منظمًا والمنتج مستوفٍ كل التفاصيل.' }
-];
-
 const DEFAULT_PRODUCTS = [
   {
     id: 'rings-101',
@@ -367,27 +360,6 @@ function renderProducts(items) {
   document.querySelectorAll('[data-detail]').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
-}
-
-function renderReviews() {
-  const reviewsRoot = $('#reviewsList');
-  if (!reviewsRoot) return;
-
-  reviewsRoot.innerHTML = REVIEW_ITEMS.map((review) => `
-    <article class="review-card">
-      <div class="review-top">
-        <div class="review-user">
-          <div class="review-avatar">${review.name.charAt(0)}</div>
-          <div>
-            <strong>${review.name}</strong>
-            <small>${review.meta}</small>
-          </div>
-        </div>
-        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
-      </div>
-      <p>${review.text}</p>
-    </article>
-  `).join('');
 }
 
 function renderCategoryPage() {
@@ -708,8 +680,7 @@ function reloadCatalogFromStorage() {
   fetch('assets/data/products.json', { cache: 'no-store' })
     .then((response) => response.ok ? response.json() : [])
     .then((data) => {
-      const normalized = normalizeCatalog(data);
-      all = normalized.length ? normalized : DEFAULT_PRODUCTS.map(normalizeProduct);
+      all = normalizeCatalog(data);
       if (currentCategories.length) {
         renderCategories(currentCategories);
       }
@@ -717,7 +688,7 @@ function reloadCatalogFromStorage() {
       renderCart();
     })
     .catch(() => {
-      all = DEFAULT_PRODUCTS.map(normalizeProduct);
+      all = [];
       if (currentCategories.length) {
         renderCategories(currentCategories);
       }
@@ -735,18 +706,10 @@ async function init() {
   const categories = categoriesResponse.ok ? await categoriesResponse.json() : [];
   const fetchedProducts = productsResponse.ok ? await productsResponse.json() : [];
 
-  const remoteValid = Array.isArray(fetchedProducts) && fetchedProducts.length && hasRemoteProductAssets(fetchedProducts);
-
-  if (remoteValid) {
-    all = normalizeCatalog(fetchedProducts);
-  } else {
-    all = DEFAULT_PRODUCTS.map(normalizeProduct);
-  }
-
+  all = normalizeCatalog(Array.isArray(fetchedProducts) ? fetchedProducts : []);
   currentCategories = categories;
 
   renderCategories(categories);
-  renderReviews();
   renderCategoryPage();
   filterProducts();
   renderCart();
