@@ -1,0 +1,252 @@
+﻿<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b0b0d">
+  <title>Regina Gold | روجينا جولد</title>
+  <link rel="icon" href="0.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/store-extra.css">
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-inner">
+      <span>فرع واحد لخدمتكم</span>
+      <a href="tel:01070530886">01070530886</a>
+    </div>
+  </div>
+
+  <header class="container header">
+    <a class="brand" href="#home" aria-label="الرئيسية">
+      <img src="0.png" alt="Regina Gold logo">
+      <span>REGINA GOLD</span>
+    </a>
+
+    <nav class="main-nav" aria-label="التنقل الرئيسي">
+      <a href="#home">الرئيسية</a>
+      <a href="#collections">المجموعات</a>
+      <a href="#shop">تسوقي</a>
+      <a href="#contact">الفروع</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-btn theme-btn" id="theme" aria-label="تبديل المظهر"><i class="fa-solid fa-moon"></i></button>
+      <button class="icon-btn cart-btn" id="cartButton" aria-label="السلة"><i class="fa-solid fa-bag-shopping"></i> <b id="cartCount">0</b></button>
+      <button class="icon-btn menu-btn" id="menu" aria-label="القائمة"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <aside class="side-panel" id="side">
+    <button class="close" data-sideclose aria-label="إغلاق القائمة">×</button>
+    <a href="#home">الرئيسية</a>
+    <a href="#collections">المجموعات</a>
+    <a href="#shop">تسوقي الآن</a>
+    <a href="#contact">فروع روجينا جولد</a>
+  </aside>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-overlay"></div>
+      <div class="hero-content reveal">
+        <span class="eyebrow">REGINA GOLD</span>
+        <h1>اختيارك من ذهب</h1>
+        <p>تشكيلات راقية تجربة تصفح سلسة وطلب مباشر يصل إليك أينما كنت.</p>
+        <div class="hero-actions">
+          <a class="btn" href="#shop">اكتشفي القطع</a>
+          <a class="btn ghost" href="#contact">زورينا</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="container reveal" id="collections">
+      <div class="heading">
+        <div>
+          <h2>مجموعات مختارة</h2>
+          <p>اختاري الفئة التي تناسب ذوقك</p>
+        </div>
+      </div>
+      <div class="categories" id="categories"></div>
+    </section>
+
+    <section class="container reveal" id="shop">
+      <div class="heading">
+        <div>
+          <h2>تسوقي روجينا جولد</h2>
+          <p id="resultText">كل القطع المتاحة الآن</p>
+        </div>
+      </div>
+
+      <div class="shop-tools">
+        <button class="filter-toggle" id="filterToggle" type="button">تصفية <i class="fa-solid fa-sliders"></i></button>
+        <div class="controls" id="filterPanel">
+          <input class="control" id="search" placeholder="ابحثي باسم القطعة أو الوصف">
+          <select class="control" id="categoryFilter">
+            <option value="">كل الفئات</option>
+          </select>
+          <select class="control" id="caratFilter">
+            <option value="">كل العيارات</option>
+          </select>
+          <select class="control" id="priceFilter">
+            <option value="">كل الأسعار</option>
+            <option value="0-3000">حتى 3000</option>
+            <option value="3000-8000">3000 – 8000</option>
+            <option value="8000-15000">8000 – 15000</option>
+            <option value="15000-999999">أكثر من 15000</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="products" id="products"></div>
+    </section>
+
+    <section class="container perks reveal">
+      <div class="perk">
+        <span><i class="fa-solid fa-shield-heart"></i></span>
+        <h3>منتجات أصلية</h3>
+      </div>
+      <div class="perk">
+        <span><i class="fa-solid fa-truck-fast"></i></span>
+        <h3>شحن سريع</h3>
+      </div>
+      <div class="perk">
+        <span><i class="fa-solid fa-wallet"></i></span>
+        <h3>دفع آمن</h3>
+      </div>
+      <div class="perk">
+        <span><i class="fa-solid fa-gem"></i></span>
+        <h3>تخصيص فريد</h3>
+      </div>
+      <div class="perk">
+        <span><i class="fa-solid fa-sparkles"></i></span>
+        <h3>متاح صيانه وتلميع</h3>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer reveal" id="contact">
+    <div class="container footer-grid">
+      <div>
+        <h3>تواصل معنا</h3>
+        <p>للطلب والتخصيص والاستفسار بسرعة.</p>
+        <ul class="footer-list">
+          <li><a href="tel:01070530886">01070530886</a></li>
+          <li><a href="https://wa.me/201070530886" target="_blank" rel="noopener">واتساب</a></li>
+          <li id="storeAddress">مصر الجديدة - شارع التسعين - القاهرة</li>
+        </ul>
+      </div>
+      <div>
+        <h3>موقعنا</h3>
+        <div class="map-wrap">
+          <iframe id="storeMap" title="موقعنا" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="overlay" id="detailModal">
+    <div class="dialog">
+      <div class="dialog-head">
+        <h2 id="detailTitle">تفاصيل المنتج</h2>
+        <button class="close" data-close aria-label="إغلاق التفاصيل">×</button>
+      </div>
+      <img class="detail-main" id="detailImage" alt="">
+      <div class="gallery" id="detailGallery"></div>
+      <div class="tags" id="detailTags"></div>
+      <p class="desc" id="detailDescription"></p>
+      <div class="detail-price" id="detailPrice"></div>
+      <p class="stock-note" id="detailStock"></p>
+      <div class="card-actions">
+        <button class="btn" id="detailAdd" type="button">أضيفي للسلة</button>
+        <button class="btn ghost" id="detailBuy" type="button">شراء مباشر</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="cartModal">
+    <div class="dialog cart-dialog">
+      <div class="dialog-head">
+        <h2>السلة</h2>
+        <button class="close" data-close aria-label="إغلاق السلة">×</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-footer">
+        <strong id="total">الإجمالي: 0 ج.م</strong>
+        <button id="checkout" class="btn" type="button">تأكيد الطلب</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="orderModal">
+    <div class="dialog order-dialog">
+      <div class="dialog-head">
+        <h2>تأكيد الطلب</h2>
+        <button class="close" data-close aria-label="إغلاق الطلب">×</button>
+      </div>
+      <form id="orderForm">
+        <div class="field full">
+          <label>اسم العميل</label>
+          <input id="customerName" required placeholder="اسمك بالكامل">
+        </div>
+        <div class="field">
+          <label>رقم الهاتف</label>
+          <input id="phone" required type="tel" placeholder="010...">
+        </div>
+        <div class="field">
+          <label>هاتف إضافي</label>
+          <input id="secondaryPhone" type="tel" placeholder="اختياري">
+        </div>
+        <div class="field full">
+          <label>البريد الإلكتروني</label>
+          <input id="email" type="email" placeholder="اختياري">
+        </div>
+        <div class="field">
+          <label>المحافظة</label>
+          <select id="governorate" required>
+            <option value="">اختاري المحافظة</option>
+            <option>القاهرة</option>
+            <option>الجيزة</option>
+            <option>القليوبية</option>
+            <option>الإسكندرية</option>
+            <option>أخرى</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>المدينة / المنطقة</label>
+          <input id="area" required placeholder="مثال: مصر الجديدة">
+        </div>
+        <div class="field full">
+          <label>العنوان بالتفصيل</label>
+          <textarea id="address" required placeholder="العنوان الكامل"></textarea>
+        </div>
+        <div class="field full">
+          <label>طريقة الدفع</label>
+          <select id="payment" required>
+            <option value="الدفع عند الاستلام">الدفع عند الاستلام</option>
+            <option value="تحويل بنكي">تحويل بنكي</option>
+            <option value="فودافون كاش">فودافون كاش</option>
+          </select>
+        </div>
+        <div class="field full">
+          <label>ملاحظات</label>
+          <textarea id="notes" placeholder="أي ملاحظات خاصة"></textarea>
+        </div>
+
+        <div class="field full">
+          <label>المنتجات المختارة</label>
+          <p class="mini-intro" id="orderIntro"></p>
+        </div>
+
+        <button class="btn" type="submit">إرسال الطلب</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

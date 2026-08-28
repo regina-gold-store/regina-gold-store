@@ -1,0 +1,19 @@
+{
+  "id": "necklaces-101",
+  "name": "سلسله",
+  "carat": "عيار 21",
+  "price": 56666,
+  "salePrice": 4444,
+  "saleEnds": "2099-12-31",
+  "manufacturing": 2024,
+  "weight": "4.8 غ",
+  "availability": "متوفر",
+  "shipping": "متوفر شحن",
+  "customOrder": true,
+  "description": "خاتم ذهبي أنيق مصمم بلمسة عصرية مع تفاصيل دقيقة وتجهيز ممتاز.",
+  "category": "necklaces",
+  "image": "products/necklaces/101/1787858632305-f74c9570-11b5-4567-a66e-b60520bcba2f-thumbnail-770x770-70.jpg",
+  "images": [
+    "products/necklaces/101/1787858632305-f74c9570-11b5-4567-a66e-b60520bcba2f-thumbnail-770x770-70.jpg"
+  ]
+}

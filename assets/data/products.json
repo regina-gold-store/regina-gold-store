@@ -1,0 +1,78 @@
+[
+  {
+    "id": "necklaces-202",
+    "name": "سلسلة ذهبية كلاسيكية",
+    "category": "necklaces",
+    "carat": "عيار 18",
+    "price": 9200,
+    "salePrice": 7600,
+    "saleEnds": "2099-12-31",
+    "manufacturing": 2025,
+    "weight": "9.2 غ",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "pickup": "استلام من الفرع",
+    "description": "سلسلة ذهبية أنيقة مناسبة للملابس الرسمية والفساتين الراقية.",
+    "image": "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1617038220319-276d3cfab638?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    "id": "bracelets-303",
+    "name": "إسورة ذهبية أنيقة",
+    "category": "bracelets",
+    "carat": "عيار 24",
+    "price": 7800,
+    "salePrice": 6500,
+    "saleEnds": "2099-12-31",
+    "manufacturing": 2024,
+    "weight": "7.1 غ",
+    "availability": "متوفر",
+    "shipping": "توصيل سريع",
+    "pickup": "استلام من الفرع",
+    "description": "إسورة ذهبية خفيفة ومريحة مع تصميم فخّم يناسب كل المناسبات.",
+    "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
+    "images": [
+      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80"
+    ]
+  },
+  {
+    "id": "necklaces-101",
+    "name": "سلسله",
+    "carat": "عيار 21",
+    "price": 56666,
+    "salePrice": 4444,
+    "saleEnds": "2099-12-31",
+    "manufacturing": 2024,
+    "weight": "4.8 غ",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "خاتم ذهبي أنيق مصمم بلمسة عصرية مع تفاصيل دقيقة وتجهيز ممتاز.",
+    "category": "necklaces",
+    "image": "products/necklaces/101/1787858632305-f74c9570-11b5-4567-a66e-b60520bcba2f-thumbnail-770x770-70.jpg",
+    "images": [
+      "products/necklaces/101/1787858632305-f74c9570-11b5-4567-a66e-b60520bcba2f-thumbnail-770x770-70.jpg"
+    ]
+  },
+  {
+    "id": "bracelets-15",
+    "name": "اساور",
+    "carat": "‏18",
+    "price": 35000,
+    "salePrice": 29999,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "6.5",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "� قطعة استثنائية تجمع بين الرقي والفخامة في تصميم أنيق يخطف الأنظار.\n🌟 تفاصيل ذهبية لامعة تضيف لمسة من التألق، وانسيابية راقية تمنح معصمك مظهرًا أنثويًا فاخرًا.\n\n👑 مثالية لإطلالاتك الراقية والمناسبات الخاصة، كما تضيف لمسة من الفخامة الهادئة لإطلالتك اليومية",
+    "category": "bracelets",
+    "image": "products/bracelets/15/1787864388990-53558762-8180-4794-857C-EBC678E8EA52.png",
+    "images": [
+      "products/bracelets/15/1787864388990-53558762-8180-4794-857C-EBC678E8EA52.png"
+    ]
+  }
+]
