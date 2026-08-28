@@ -93,5 +93,24 @@
     "images": [
       "products/watches/44/1787933174721-808x454_cmsv2_32a93bcc-4dce-56e1-b7c3-005bfe5fe829-9636862.jpg"
     ]
+  },
+  {
+    "id": "bracelets-322332",
+    "name": "ثث",
+    "carat": "233",
+    "price": 232332,
+    "salePrice": 2323,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "33",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "ؤؤثؤث",
+    "category": "bracelets",
+    "image": "products/bracelets/322332/1787933339079-ChatGPT-Image-25-------2026--07_53_33--.png",
+    "images": [
+      "products/bracelets/322332/1787933339079-ChatGPT-Image-25-------2026--07_53_33--.png"
+    ]
   }
 ]
