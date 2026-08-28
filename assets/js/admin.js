@@ -396,7 +396,7 @@ $('#productForm').onsubmit = async (event) => {
     }
 
     if (!paths.length) {
-      throw new Error('أضيفي صورة واحدة على الأقل.');
+      throw new Error('أضف صورة واحدة على الأقل.');
     }
 
     const product = {

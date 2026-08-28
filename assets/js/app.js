@@ -237,6 +237,18 @@ function renderCategories(categories) {
     return all.some((product) => product.category === category.id);
   });
 
+  const newestCategoryOrder = [...new Set(all
+    .slice()
+    .reverse()
+    .map((product) => product.category)
+    .filter(Boolean))];
+
+  populatedCategories.sort((a, b) => {
+    const indexA = newestCategoryOrder.indexOf(a.id);
+    const indexB = newestCategoryOrder.indexOf(b.id);
+    return (indexA === -1 ? Infinity : indexA) - (indexB === -1 ? Infinity : indexB);
+  });
+
   container.innerHTML = populatedCategories.map((category, index) => {
     const categoryProducts = all.filter((product) => product.category === category.id);
     const count = categoryProducts.length;
@@ -329,7 +341,7 @@ function renderProducts(items) {
             ${oldPrice ? `<span class="old-price">${oldPrice}</span>` : ''}
           </div>
           <div class="card-actions">
-            <button class="btn add" data-id="${normalized.id}" type="button">أضيفي للسلة</button>
+            <button class="btn add" data-id="${normalized.id}" type="button">أضف للسلة</button>
             <button class="btn ghost buy" data-id="${normalized.id}" type="button">شراء مباشر</button>
           </div>
         </div>
@@ -416,7 +428,7 @@ function renderCategoryPage() {
             ${oldPrice ? `<span class="old-price">${oldPrice}</span>` : ''}
           </div>
           <div class="card-actions">
-            <button class="btn add" data-id="${normalized.id}" type="button">أضيفي للسلة</button>
+            <button class="btn add" data-id="${normalized.id}" type="button">أضف للسلة</button>
             <button class="btn ghost buy" data-id="${normalized.id}" type="button">شراء مباشر</button>
           </div>
         </div>
@@ -497,7 +509,9 @@ function filterProducts() {
   const resultText = $('#resultText');
   if (resultText) resultText.textContent = `${filtered.length} قطعة متاحة`;
 
-  renderProducts(filtered);
+  if ($('#products')) {
+    renderProducts(filtered);
+  }
   updateSearchSuggestions();
 }
 
