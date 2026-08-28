@@ -1,0 +1,19 @@
+{
+  "id": "watches-44",
+  "name": "regina gold",
+  "carat": "21",
+  "price": 333333,
+  "salePrice": 43,
+  "saleEnds": "",
+  "manufacturing": 2020,
+  "weight": "44",
+  "availability": "متوفر",
+  "shipping": "متوفر شحن",
+  "customOrder": true,
+  "description": "ثقثقث",
+  "category": "watches",
+  "image": "products/watches/44/1787933174721-808x454_cmsv2_32a93bcc-4dce-56e1-b7c3-005bfe5fe829-9636862.jpg",
+  "images": [
+    "products/watches/44/1787933174721-808x454_cmsv2_32a93bcc-4dce-56e1-b7c3-005bfe5fe829-9636862.jpg"
+  ]
+}
