@@ -1,10 +1,10 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0b0b0d">
-  <title>Regina Gold | روجينا جولد</title>
+  <title>الفئة | Regina Gold</title>
   <link rel="icon" href="0.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,16 +22,16 @@
   </div>
 
   <header class="container header">
-    <a class="brand" href="#home" aria-label="الرئيسية">
+    <a class="brand" href="index.html" aria-label="الرئيسية">
       <img src="0.png" alt="Regina Gold logo">
       <span>REGINA GOLD</span>
     </a>
 
     <nav class="main-nav" aria-label="التنقل الرئيسي">
-      <a href="#home">الرئيسية</a>
-      <a href="#collections">المجموعات</a>
-      <a href="#shop">تسوقي</a>
-      <a href="#contact">الفروع</a>
+      <a href="index.html#home">الرئيسية</a>
+      <a href="index.html#collections">المجموعات</a>
+      <a href="index.html#shop">تسوقي</a>
+      <a href="index.html#contact">الفروع</a>
     </nav>
 
     <div class="header-actions">
@@ -43,99 +43,23 @@
 
   <aside class="side-panel" id="side">
     <button class="close" data-sideclose aria-label="إغلاق القائمة">×</button>
-    <a href="#home">الرئيسية</a>
-    <a href="#collections">المجموعات</a>
-    <a href="#shop">تسوقي الآن</a>
-    <a href="#contact">فروع روجينا جولد</a>
+    <a href="index.html#home">الرئيسية</a>
+    <a href="index.html#collections">المجموعات</a>
+    <a href="index.html#shop">تسوقي الآن</a>
+    <a href="index.html#contact">فروع روجينا جولد</a>
   </aside>
 
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-overlay"></div>
-      <div class="hero-content reveal">
-        <span class="eyebrow">REGINA GOLD</span>
-        <h1>اختيارك من ذهب</h1>
-        <p>تشكيلات راقية تجربة تصفح سلسة وطلب مباشر يصل إليك أينما كنت.</p>
-        <div class="hero-actions">
-          <a class="btn" href="#shop">اكتشفي القطع</a>
-          <a class="btn ghost" href="#contact">زورينا</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="container reveal" id="collections">
-      <div class="heading">
+  <main class="category-page">
+    <div class="container">
+      <div class="category-header-page">
         <div>
-          <h2>مجموعات مختارة</h2>
-          <p>اختاري الفئة التي تناسب ذوقك</p>
+          <span class="eyebrow">المجموعة</span>
+          <h1 id="categoryPageTitle">الفئة</h1>
         </div>
+        <a class="btn ghost" href="index.html#collections">العودة للمجموعات</a>
       </div>
-      <div class="categories" id="categories"></div>
-    </section>
-
-    <section class="container reveal" id="shop">
-      <div class="heading">
-        <div>
-          <h2>تسوقي روجينا جولد</h2>
-          <p id="resultText">كل القطع المتاحة الآن</p>
-        </div>
-      </div>
-
-      <div class="shop-tools">
-        <button class="filter-toggle" id="filterToggle" type="button">تصفية <i class="fa-solid fa-sliders"></i></button>
-        <div class="controls" id="filterPanel">
-          <input class="control" id="search" placeholder="ابحثي باسم القطعة أو الوصف">
-          <select class="control" id="categoryFilter">
-            <option value="">كل الفئات</option>
-          </select>
-          <select class="control" id="caratFilter">
-            <option value="">كل العيارات</option>
-          </select>
-          <select class="control" id="priceFilter">
-            <option value="">كل الأسعار</option>
-            <option value="0-3000">حتى 3000</option>
-            <option value="3000-8000">3000 – 8000</option>
-            <option value="8000-15000">8000 – 15000</option>
-            <option value="15000-999999">أكثر من 15000</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="products" id="products"></div>
-    </section>
-
-    <section class="container perks reveal">
-      <div class="perk">
-        <span><i class="fa-solid fa-shield-heart"></i></span>
-        <h3>منتجات أصلية</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-truck-fast"></i></span>
-        <h3>شحن سريع</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-wallet"></i></span>
-        <h3>دفع آمن</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-gem"></i></span>
-        <h3>تخصيص فريد</h3>
-      </div>
-      <div class="perk">
-        <span><i class="fa-solid fa-sparkles"></i></span>
-        <h3>متاح صيانه وتلميع</h3>
-      </div>
-    </section>
-
-    <section class="container reveal" id="reviews">
-      <div class="heading">
-        <div>
-          <h2>آراء العملاء</h2>
-          <p>تجارب من عملاء غير معروفين</p>
-        </div>
-      </div>
-      <div class="reviews" id="reviewsList"></div>
-    </section>
+      <div class="category-grid" id="categoryProducts"></div>
+    </div>
   </main>
 
   <footer class="site-footer reveal" id="contact">

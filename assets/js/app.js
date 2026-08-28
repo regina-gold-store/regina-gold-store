@@ -50,6 +50,13 @@ function formatDisplayValue(raw, kind) {
   return text;
 }
 
+const REVIEW_ITEMS = [
+  { name: 'سارة', meta: 'عميلة', rating: 5, text: 'التجربة كانت ممتازة، جودة الذهب رائعة والطلب وصل بشكل سريع وبدون أي تأخير.' },
+  { name: 'مريم', meta: 'عميلة', rating: 5, text: 'الفخامة واللمسة الأنيقة كانت واضحة في المنتج، والخدمة كانت محترفة من البداية حتى التسليم.' },
+  { name: 'شهد', meta: 'عميلة', rating: 4, text: 'المنتج مطابق لوصفه بالكامل ومظهره أنيق جدًا، وأحببت تنوع التصاميم المتاحة.' },
+  { name: 'ليلى', meta: 'عميلة', rating: 5, text: 'الاستفسار كان سريعًا جدًا، والتوصيل كان منظمًا والمنتج مستوفٍ كل التفاصيل.' }
+];
+
 const DEFAULT_PRODUCTS = [
   {
     id: 'rings-101',
@@ -272,12 +279,8 @@ function renderCategories(categories) {
 
   document.querySelectorAll('[data-cat-more]').forEach((button) => {
     button.onclick = () => {
-      const filter = $('#categoryFilter');
-      if (filter) {
-        filter.value = button.dataset.catMore;
-        filterProducts();
-        document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      const categoryId = button.dataset.catMore;
+      window.location.href = `category.html?cat=${encodeURIComponent(categoryId)}`;
     };
   });
 
@@ -354,6 +357,93 @@ function renderProducts(items) {
   });
 }
 
+function renderReviews() {
+  const reviewsRoot = $('#reviewsList');
+  if (!reviewsRoot) return;
+
+  reviewsRoot.innerHTML = REVIEW_ITEMS.map((review) => `
+    <article class="review-card">
+      <div class="review-top">
+        <div class="review-user">
+          <div class="review-avatar">${review.name.charAt(0)}</div>
+          <div>
+            <strong>${review.name}</strong>
+            <small>${review.meta}</small>
+          </div>
+        </div>
+        <div class="review-rating">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+      </div>
+      <p>${review.text}</p>
+    </article>
+  `).join('');
+}
+
+function renderCategoryPage() {
+  const grid = $('#categoryProducts');
+  const pageTitle = $('#categoryPageTitle');
+  if (!grid || !pageTitle) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const categoryId = params.get('cat') || '';
+  const category = currentCategories.find((item) => item.id === categoryId) || { name: 'الفئة' };
+  const items = all.filter((product) => product.category === categoryId);
+
+  pageTitle.textContent = category.name;
+  if (!items.length) {
+    grid.innerHTML = '<div class="empty">لا توجد منتجات في هذه الفئة حالياً.</div>';
+    return;
+  }
+
+  grid.innerHTML = items.map((product) => {
+    const normalized = normalizeProduct(product);
+    const images = productImages(normalized);
+    const price = salePrice(normalized);
+    const oldPrice = Number(normalized.price || 0) > Number(price || 0) ? money(normalized.price) : '';
+
+    return `
+      <article class="card reveal" data-detail="${normalized.id}">
+        <img src="${images[0] || FALLBACK_IMAGE}" alt="${normalized.name}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
+        <div class="card-body">
+          <div class="tags">
+            <span class="tag">${formatDisplayValue(normalized.carat, 'carat') || 'عيار 24'}</span>
+            <span class="tag">${normalized.availability || 'متوفر'}</span>
+            <span class="tag">${normalized.shipping || 'متوفر شحن'}</span>
+          </div>
+          <h3>${normalized.name}</h3>
+          <p class="desc">${normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'}</p>
+          <div class="price">
+            ${money(price)}
+            ${oldPrice ? `<span class="old-price">${oldPrice}</span>` : ''}
+          </div>
+          <div class="card-actions">
+            <button class="btn add" data-id="${normalized.id}" type="button">أضيفي للسلة</button>
+            <button class="btn ghost buy" data-id="${normalized.id}" type="button">شراء مباشر</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  document.querySelectorAll('.add').forEach((button) => {
+    button.onclick = (event) => {
+      event.stopPropagation();
+      addToCart(button.dataset.id);
+    };
+  });
+
+  document.querySelectorAll('.buy').forEach((button) => {
+    button.onclick = (event) => {
+      event.stopPropagation();
+      const product = all.find((item) => item.id === button.dataset.id);
+      if (product) openOrder([product]);
+    };
+  });
+
+  document.querySelectorAll('[data-detail]').forEach((card) => {
+    card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
+  });
+}
+
 function filterProducts() {
   const search = $('#search')?.value.toLowerCase() || '';
   const category = $('#categoryFilter')?.value || '';
@@ -378,7 +468,7 @@ function filterProducts() {
   const resultText = $('#resultText');
   if (resultText) resultText.textContent = `${filtered.length} قطعة متاحة`;
 
-  renderProducts([]);
+  renderProducts(filtered);
 }
 
 function addToCart(id) {
@@ -623,6 +713,8 @@ async function init() {
   }
 
   renderCategories(categories);
+  renderReviews();
+  renderCategoryPage();
   filterProducts();
   renderCart();
 

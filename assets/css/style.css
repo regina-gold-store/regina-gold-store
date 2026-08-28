@@ -495,6 +495,83 @@ img { max-width: 100%; display: block; }
   gap: 20px;
 }
 
+.reviews {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 30px;
+}
+
+.review-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 18px 16px;
+  box-shadow: var(--shadow);
+}
+
+.review-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.review-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.review-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(220,174,85,0.12);
+  color: var(--gold);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+
+.review-rating {
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 1px;
+}
+
+.category-page {
+  padding: 30px 0 60px;
+}
+
+.category-header-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 22px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.category-page .card {
+  background: var(--paper);
+}
+
+.category-page .empty {
+  background: var(--paper);
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  padding: 30px;
+  text-align: center;
+  color: var(--muted);
+}
+
 .card {
   position: relative;
   background: rgba(255,255,255,0.01);
