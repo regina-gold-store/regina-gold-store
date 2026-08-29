@@ -2,6 +2,8 @@
 let products = [];
 let editing = null;
 let selectedFiles = [];
+let editingImagePaths = [];
+let deletedImagePaths = [];
 
 const loginStorageKey = 'reginaAdminSession';
 const storeConfigKey = 'reginaStoreConfig';
@@ -91,6 +93,16 @@ async function existing(path) {
     if (error.status === 404) return null;
     throw error;
   }
+}
+
+async function deleteGitHubFile(path) {
+  const file = await existing(path);
+  if (!file) return;
+
+  await api(getRoot() + path, 'DELETE', {
+    message: `Remove image ${path}`,
+    sha: file.sha
+  });
 }
 
 async function put(path, content, message) {
@@ -238,16 +250,60 @@ function renderSelectedImages(files) {
   if (!preview) return;
 
   preview.innerHTML = '';
+  const imageEntries = [];
 
-  files.slice(0, 8).forEach((file) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const box = document.createElement('div');
-      box.className = 'img-preview';
-      box.innerHTML = `<img src="${event.target.result}" alt="preview">`;
-      preview.appendChild(box);
-    };
-    reader.readAsDataURL(file);
+  editingImagePaths.forEach((path) => {
+    imageEntries.push({ type: 'existing', path });
+  });
+
+  files.slice(0, 8).forEach((file, index) => {
+    imageEntries.push({ type: 'new', file, index });
+  });
+
+  imageEntries.forEach((entry) => {
+    const box = document.createElement('div');
+    box.className = 'img-preview';
+
+    if (entry.type === 'existing') {
+      const img = document.createElement('img');
+      img.src = imageUrl(entry.path);
+      img.alt = 'product image';
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'remove-image-btn';
+      removeBtn.title = 'حذف الصورة';
+      removeBtn.textContent = '×';
+      removeBtn.onclick = () => {
+        deletedImagePaths.push(entry.path);
+        editingImagePaths = editingImagePaths.filter((path) => path !== entry.path);
+        renderSelectedImages(selectedFiles);
+      };
+      box.appendChild(img);
+      box.appendChild(removeBtn);
+    } else {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = document.createElement('img');
+        img.src = event.target.result;
+        img.alt = 'new preview';
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'remove-image-btn';
+        removeBtn.title = 'حذف الصورة';
+        removeBtn.textContent = '×';
+        removeBtn.onclick = () => {
+          selectedFiles.splice(entry.index, 1);
+          renderSelectedImages(selectedFiles);
+        };
+
+        box.appendChild(img);
+        box.appendChild(removeBtn);
+      };
+      reader.readAsDataURL(entry.file);
+    }
+
+    preview.appendChild(box);
   });
 }
 
@@ -331,15 +387,9 @@ function edit(id) {
   $('#customOrder').value = String(product.customOrder ?? true);
   $('#imagePreview').innerHTML = '';
   selectedFiles = [];
-  const previewList = images(product);
-  previewList.forEach((src) => {
-    const img = document.createElement('img');
-    img.src = imageUrl(src);
-    const wrapper = document.createElement('div');
-    wrapper.className = 'img-preview';
-    wrapper.appendChild(img);
-    $('#imagePreview').appendChild(wrapper);
-  });
+  deletedImagePaths = [];
+  editingImagePaths = [...images(product)];
+  renderSelectedImages(selectedFiles);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -348,6 +398,8 @@ $('#resetForm').onclick = () => {
   $('#productForm').reset();
   $('#imagePreview').innerHTML = '';
   selectedFiles = [];
+  editingImagePaths = [];
+  deletedImagePaths = [];
   $('#formTitle').textContent = 'إضافة صنف جديد';
 };
 
@@ -388,7 +440,7 @@ $('#productForm').onsubmit = async (event) => {
 
     const id = `${category}-${num}`;
     const base = `products/${category}/${num}`;
-    let paths = editing && editing.id === id ? images(editing) : [];
+    const existingPaths = editing && editing.id === id ? [...editingImagePaths] : [];
     const files = Array.from($('#images').files || []).slice(0, 8);
 
     msg('جار حفظ المنتج…');
@@ -397,10 +449,18 @@ $('#productForm').onsubmit = async (event) => {
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
       const path = `${base}/${Date.now()}-${safeName}`;
       await put(path, await readFileAsBase64(file), `Upload image for ${id}`);
-      paths.push(path);
+      existingPaths.push(path);
     }
 
-    if (!paths.length) {
+    const finalPaths = [...new Set(existingPaths.filter(Boolean))];
+
+    for (const removedPath of [...new Set(deletedImagePaths)]) {
+      if (removedPath && !finalPaths.includes(removedPath)) {
+        await deleteGitHubFile(removedPath);
+      }
+    }
+
+    if (!finalPaths.length) {
       throw new Error('أضف صورة واحدة على الأقل.');
     }
 
@@ -418,8 +478,8 @@ $('#productForm').onsubmit = async (event) => {
       customOrder: $('#customOrder').value === 'true',
       description: $('#description').value.trim(),
       category,
-      image: paths[0],
-      images: [...new Set(paths)]
+      image: finalPaths[0],
+      images: finalPaths
     };
 
     await put(`${base}/product.json`, encodeJson(product), `Save ${id}`);
@@ -435,6 +495,8 @@ $('#productForm').onsubmit = async (event) => {
     await sendTelegramProductUpdate(product.name, editing ? 'تعديل' : 'إضافة');
 
     editing = null;
+    editingImagePaths = [];
+    deletedImagePaths = [];
     $('#productForm').reset();
     $('#imagePreview').innerHTML = '';
     selectedFiles = [];

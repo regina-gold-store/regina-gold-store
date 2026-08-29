@@ -38,6 +38,21 @@
     .preview-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 10px; }
     .img-preview { position: relative; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
     .img-preview img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+    .remove-image-btn {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      width: 28px;
+      height: 28px;
+      border: none;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 2;
+    }
     .two-col { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
     .full-width { grid-column: 1 / -1; }
     .hidden { display: none !important; }
