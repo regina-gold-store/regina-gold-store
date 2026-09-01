@@ -255,22 +255,22 @@
   },
   {
     "id": "rings-1006",
-    "name": "خاتم حريمي",
-    "carat": "‏18",
-    "price": 8000,
-    "salePrice": 7700,
+    "name": "",
+    "carat": "",
+    "price": 0,
+    "salePrice": "",
     "saleEnds": "",
     "manufacturing": "",
-    "weight": "‏0",
+    "weight": "",
     "availability": "متوفر",
     "shipping": "متوفر شحن",
     "customOrder": true,
-    "description": "✨ خاتم ذهب أنيق بتصميم راقٍ وعصري ✨\n\nقطعة مميزة تجمع بين الفخامة والبساطة، بتفاصيل أنيقة ولمسة ذهبية لامعة تمنحها حضورًا راقيًا على اليد. 💛\n\nمناسب للإطلالات اليومية والمناسبات، ويضيف لمسة من الأناقة والتميز لأي إطلالة. 👑✨\n\n💎 العيار: ذهب 18\n💛 الخامة: ذهب أصفر\n✨ التصنيف: خاتم نسائي\n🎁 اختيار مثالي للهدايا والمناسبات الخاصة",
+    "description": "",
     "category": "rings",
-    "image": "products/rings/1006/1788290962096-0CDF9FD1-40FC-46B8-AA91-8BA626BE0AF1.png",
+    "image": "products/rings/1006/1788291108616-0CDF9FD1-40FC-46B8-AA91-8BA626BE0AF1.png",
     "images": [
-      "products/rings/1006/1788290962096-0CDF9FD1-40FC-46B8-AA91-8BA626BE0AF1.png",
-      "products/rings/1006/1788290969640-823EA109-1DB9-4815-BF16-A1606D6B6D58.png"
+      "products/rings/1006/1788291108616-0CDF9FD1-40FC-46B8-AA91-8BA626BE0AF1.png",
+      "products/rings/1006/1788291118372-823EA109-1DB9-4815-BF16-A1606D6B6D58.png"
     ]
   }
 ]
