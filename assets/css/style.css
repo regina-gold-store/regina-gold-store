@@ -542,7 +542,24 @@ img { max-width: 100%; display: block; }
   font-size: 28px;
 }
 
-.floating-whatsapp:hover {
+.floating-facebook {
+  position: fixed;
+  right: 22px;
+  bottom: 96px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1877f2, #0b5fd1);
+  color: white;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 20px 35px rgba(24, 119, 242, 0.32);
+  z-index: 1000;
+  font-size: 26px;
+}
+
+.floating-whatsapp:hover,
+.floating-facebook:hover {
   transform: translateY(-2px);
 }
 
