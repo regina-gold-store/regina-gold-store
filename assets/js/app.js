@@ -546,6 +546,41 @@ function renderCart() {
   });
 }
 
+function buildProductShareUrl(product) {
+  const id = product && product.id ? product.id : '';
+  const url = new URL(window.location.href);
+  url.searchParams.set('product', id);
+  return url.toString();
+}
+
+async function shareProduct(product) {
+  if (!product) return;
+
+  const shareUrl = buildProductShareUrl(product);
+  const title = product.name || 'منتج روجينا جولد';
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title,
+        text: `تصفح هذا المنتج: ${title}`,
+        url: shareUrl
+      });
+      return;
+    } catch {
+      // Fall back to copy link below
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(shareUrl);
+    alert('تم نسخ رابط المنتج بنجاح.');
+  } catch {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+    alert('تم فتح نافذة مشاركة الفيسبوك. يمكنك نسخ الرابط يدويًا إذا لزم الأمر.');
+  }
+}
+
 function showDetail(product) {
   if (!product) return;
   const normalized = normalizeProduct(product);
@@ -585,8 +620,10 @@ function showDetail(product) {
 
   const addBtn = $('#detailAdd');
   const buyBtn = $('#detailBuy');
+  const shareBtn = $('#detailShare');
   if (addBtn) addBtn.onclick = () => { addToCart(product.id); modal.classList.remove('show'); };
   if (buyBtn) buyBtn.onclick = () => { modal.classList.remove('show'); openOrder([product]); };
+  if (shareBtn) shareBtn.onclick = () => shareProduct(product);
 }
 
 function openOrder(items) {
@@ -716,6 +753,14 @@ async function init() {
 
   all = normalizeCatalog(Array.isArray(fetchedProducts) ? fetchedProducts : []);
   currentCategories = Array.isArray(categories) ? categories : [];
+
+  const productIdFromQuery = new URLSearchParams(window.location.search).get('product');
+  if (productIdFromQuery) {
+    const linkedProduct = all.find((product) => product.id === productIdFromQuery);
+    if (linkedProduct) {
+      setTimeout(() => showDetail(linkedProduct), 100);
+    }
+  }
 
   renderCategories(currentCategories);
   renderCategoryPage();

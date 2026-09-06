@@ -131,7 +131,16 @@ function imageUrl(path) {
 
 function renderInventory() {
   const box = $('#inventory');
-  box.innerHTML = products.length ? products.map((product) => `
+  const searchTerm = ($('#adminProductSearch')?.value || '').trim().toLowerCase();
+  const filteredProducts = !searchTerm ? products : products.filter((product) => {
+    const productId = String(product.id || '').toLowerCase();
+    const productNumber = (String(product.id || '').split('-').slice(1).join('-') || '').toLowerCase();
+    const name = String(product.name || '').toLowerCase();
+    const category = String(product.category || '').toLowerCase();
+    return productId.includes(searchTerm) || productNumber.includes(searchTerm) || name.includes(searchTerm) || category.includes(searchTerm);
+  });
+
+  box.innerHTML = filteredProducts.length ? filteredProducts.map((product) => `
     <article class="item">
       <img src="${imageUrl(images(product)[0])}" alt="${product.name}">
       <h3>${product.name}</h3>
@@ -141,7 +150,7 @@ function renderInventory() {
         <button class="btn ghost del" data-id="${product.id}" type="button">حذف</button>
       </div>
     </article>
-  `).join('') : '<p>لا توجد منتجات.</p>';
+  `).join('') : '<p>لا توجد منتجات مطابقة للبحث.</p>';
 
   document.querySelectorAll('.edit').forEach((button) => {
     button.onclick = () => edit(button.dataset.id);
@@ -533,7 +542,64 @@ async function remove(id) {
   }
 }
 
+function exportProductsWorkbook() {
+  try {
+    if (!Array.isArray(products) || !products.length) {
+      msg('لا توجد منتجات لتصديرها.', true);
+      return;
+    }
+
+    const workbook = XLSX.utils.book_new();
+    const rows = products.map((product) => {
+      const productImages = images(product);
+      const imageUrls = productImages.map((img) => imageUrl(img)).join(' | ');
+      return {
+        'رقم المنتج': product.id || '',
+        'اسم المنتج': product.name || '',
+        'الفئة': product.category || '',
+        'العيار': product.carat || '',
+        'السعر': product.price || 0,
+        'سعر الخصم': product.salePrice || '',
+        'تاريخ انتهاء العرض': product.saleEnds || '',
+        'التصنيع': product.manufacturing || '',
+        'الوزن': product.weight || '',
+        'الحالة': product.availability || '',
+        'الشحن': product.shipping || '',
+        'طلب شخصي': product.customOrder ? 'مسموح' : 'غير مسموح',
+        'الوصف': product.description || '',
+        'الصورة الأولى': productImages[0] ? imageUrl(productImages[0]) : '',
+        'كل الصور': imageUrls,
+        'رابط المنتج': `${window.location.origin}${window.location.pathname.replace(/\/[^/]*$/, '')}/index.html?product=${encodeURIComponent(product.id || '')}`
+      };
+    });
+
+    const sheet = XLSX.utils.json_to_sheet(rows);
+    XLSX.utils.book_append_sheet(workbook, sheet, 'المنتجات');
+
+    const imageRows = products.flatMap((product) => {
+      const productImages = images(product);
+      return productImages.map((imagePath, index) => ({
+        'رقم المنتج': product.id || '',
+        'اسم المنتج': product.name || '',
+        'الفئة': product.category || '',
+        'الرقم التسلسلي للصورة': index + 1,
+        'رابط الصورة': imageUrl(imagePath)
+      }));
+    });
+
+    const imageSheet = XLSX.utils.json_to_sheet(imageRows);
+    XLSX.utils.book_append_sheet(workbook, imageSheet, 'الصور');
+
+    XLSX.writeFile(workbook, `regina-products-${new Date().toISOString().slice(0, 10)}.xlsx`);
+    msg('تم تصدير ملف Excel للمنتجات والملفات بنجاح.');
+  } catch (error) {
+    msg(`تعذر تصدير ملف Excel: ${error.message}`, true);
+  }
+}
+
 $('#saveStoreConfig').onclick = saveStoreConfig;
+$('#exportProductsExcel').onclick = exportProductsWorkbook;
+$('#adminProductSearch').oninput = renderInventory;
 
 $('#clearProducts').onclick = async () => {
   if (!confirm('هل تريد حذف جميع المنتجات من المتجر؟')) return;

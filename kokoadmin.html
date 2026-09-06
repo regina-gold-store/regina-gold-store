@@ -156,7 +156,9 @@
               <h2 id="formTitle">إضافة صنف جديد</h2>
             </div>
             <div class="right">
+              <input id="adminProductSearch" type="search" placeholder="ابحث برقم الصنف أو اسم المنتج" style="min-width: 260px;">
               <button class="btn" id="loadProducts" type="button">تحميل المنتجات</button>
+              <button class="btn" id="exportProductsExcel" type="button">تصدير Excel</button>
               <button class="btn ghost" id="clearProducts" type="button">حذف جميع المنتجات</button>
               <button class="btn ghost" id="resetForm" type="button">إعادة تعيين</button>
             </div>
@@ -254,6 +256,7 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="assets/js/config.js"></script>
   <script src="assets/js/admin.js"></script>
 </body>
