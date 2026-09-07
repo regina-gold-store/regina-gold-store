@@ -761,6 +761,49 @@ img { max-width: 100%; display: block; }
   line-height: 1.7;
 }
 
+.social-proof {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+  margin: 10px auto 32px;
+}
+
+.social-proof-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 86px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.02);
+  color: var(--text);
+  font-weight: 700;
+  text-align: center;
+  padding: 10px 12px;
+}
+
+.social-proof-item span {
+  font-size: 1.4rem;
+}
+
+.follow-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(220,174,85,0.09), rgba(255,255,255,0.02));
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  margin: 8px auto 42px;
+}
+
+.follow-banner h3 {
+  margin: 8px 0 0;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
 .site-footer {
   background: rgba(255,255,255,0.01);
   border-top: 1px solid var(--line);

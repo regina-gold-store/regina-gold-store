@@ -449,6 +449,7 @@ $('#productForm').onsubmit = async (event) => {
 
     const id = `${category}-${num}`;
     const base = `products/${category}/${num}`;
+    const originalId = editing && editing.id ? editing.id : null;
     const existingPaths = editing && editing.id === id ? [...editingImagePaths] : [];
     const files = Array.from($('#images').files || []).slice(0, 8);
 
@@ -462,7 +463,6 @@ $('#productForm').onsubmit = async (event) => {
     }
 
     const finalPaths = [...new Set(existingPaths.filter(Boolean))];
-
     for (const removedPath of [...new Set(deletedImagePaths)]) {
       if (removedPath && !finalPaths.includes(removedPath)) {
         await deleteGitHubFile(removedPath);
@@ -494,11 +494,29 @@ $('#productForm').onsubmit = async (event) => {
     await put(`${base}/product.json`, encodeJson(product), `Save ${id}`);
 
     const current = await getList();
-    products = current.list.filter((item) => item.id !== id && item.id !== (editing && editing.id));
-    products.push(product);
+    const baseList = Array.isArray(current.list) ? current.list : [];
+    const mergedList = baseList.filter((item) => item.id !== originalId && item.id !== id);
+    mergedList.push(product);
+    products = mergedList;
     persistProductsLocal(products);
     if (current.sha && getToken()) {
-      await saveList(products, current.sha, `Publish ${product.name}`);
+      await saveList(mergedList, current.sha, `Publish ${product.name}`);
+    }
+
+    if (originalId && originalId !== id) {
+      const oldBase = `products/${originalId.split('-')[0]}/${originalId.split('-').slice(1).join('-')}`;
+      try {
+        const oldProduct = baseList.find((item) => item.id === originalId);
+        if (oldProduct && Array.isArray(oldProduct.images)) {
+          for (const oldImage of oldProduct.images) {
+            if (oldImage && !finalPaths.includes(oldImage)) {
+              await deleteGitHubFile(oldImage);
+            }
+          }
+        }
+      } catch {
+        // ignore cleanup failures for old product directory
+      }
     }
 
     await sendTelegramProductUpdate(product.name, editing ? 'تعديل' : 'إضافة');
