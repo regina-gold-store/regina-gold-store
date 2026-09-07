@@ -950,6 +950,8 @@ img { max-width: 100%; display: block; }
   border-radius: 18px;
   margin-top: 18px;
   border: 1px solid var(--line);
+  transition: opacity .45s ease, transform .45s ease;
+  animation: detailImageFade .45s ease;
 }
 
 .gallery {
@@ -965,6 +967,19 @@ img { max-width: 100%; display: block; }
   object-fit: cover;
   border-radius: 12px;
   border: 1px solid var(--line);
+  transition: transform .25s ease, border-color .25s ease, opacity .25s ease;
+  cursor: pointer;
+}
+
+.gallery img.active {
+  border-color: var(--highlight);
+  opacity: 1;
+  transform: scale(1.02);
+}
+
+@keyframes detailImageFade {
+  from { opacity: 0.3; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 #detailTags { margin-bottom: 14px; }
