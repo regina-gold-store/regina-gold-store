@@ -588,35 +588,27 @@ function renderCart() {
 
 function buildProductShareUrl(product) {
   const id = product && product.id ? product.id : '';
-  const url = new URL(window.location.href);
-  url.searchParams.set('product', id);
-  return url.toString();
+  const category = product && product.category ? product.category : id.split('-')[0];
+  const number = id.startsWith(`${category}-`) ? id.slice(`${category}-`.length) : id.split('-').slice(1).join('-');
+  if (!category || !number) return window.location.href;
+  const basePath = window.location.pathname.replace(/\/index\.html$|\/category\.html$/, '').replace(/\/$/, '');
+  return `${window.location.origin}${basePath}/products/${encodeURIComponent(category)}/${encodeURIComponent(number)}/share.html`;
 }
 
 async function shareProduct(product) {
   if (!product) return;
 
   const shareUrl = buildProductShareUrl(product);
-  const title = product.name || 'منتج روجينا جولد';
+  const title = product.name || productDisplayName(product);
 
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title,
-        text: `تصفح هذا المنتج: ${title}`,
-        url: shareUrl
-      });
-      return;
-    } catch {
-      // Fall back to copy link below
-    }
-  }
+  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(`تصفح ${title} من روجينا جولد` )}`;
 
   try {
     await navigator.clipboard.writeText(shareUrl);
-    alert('تم نسخ رابط المنتج بنجاح.');
+    window.open(facebookUrl, '_blank', 'noopener,noreferrer,width=720,height=650');
+    alert('تم فتح مشاركة فيسبوك ونسخ رابط المنتج. ستظهر صورة المنتج تلقائيًا بعد نشره.');
   } catch {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank');
+    window.open(facebookUrl, '_blank', 'noopener,noreferrer,width=720,height=650');
     alert('تم فتح نافذة مشاركة الفيسبوك. يمكنك نسخ الرابط يدويًا إذا لزم الأمر.');
   }
 }
