@@ -291,5 +291,26 @@
     "images": [
       "products/rings/1006/1788292725412-6D0A3815-3990-41C5-B82B-9FB849263B5A.png"
     ]
+  },
+  {
+    "id": "rings-1009",
+    "name": "خاتم الملكه روجينا",
+    "carat": "21",
+    "price": 44050,
+    "salePrice": 43750,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "isBestSeller": true,
+    "description": "",
+    "category": "rings",
+    "image": "products/rings/1009/1790251803730-0-006--2-.jpg",
+    "images": [
+      "products/rings/1009/1790251803730-0-006--2-.jpg",
+      "products/rings/1009/1790251806917-0-006.jpg"
+    ]
   }
 ]
