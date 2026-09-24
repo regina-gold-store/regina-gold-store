@@ -19,6 +19,9 @@
     .panel-body { padding: 24px; }
     .field { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
     .field label { color: var(--muted); font-weight: 700; }
+    .check-field { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .check-field input { width: auto; }
+    .bulk-upload-field small { color: var(--muted); }
     .field input, .field select, .field textarea {
       width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,.01); color: var(--text);
       border-radius: 14px; padding: 12px 14px; outline: none; transition: border-color .2s ease, box-shadow .2s ease;
@@ -174,32 +177,33 @@
                   <option value="bracelets">أساور</option>
                   <option value="earrings">أقراط</option>
                   <option value="sets">أطقم</option>
+                  <option value="wedding-sets">أطقم الأفراح والخطوبة</option>
                   <option value="italian-gold">ذهب إيطالي</option>
                   <option value="ingots">سبائك</option>
                   <option value="coins">عملات ذهبية</option>
-                  <option value="pendants">تعليقات</option>
+                  <option value="pendants">دلايات الذهب</option>
                   <option value="watches">ساعات</option>
                 </select>
               </div>
               <div class="field">
                 <label>رقم الصنف</label>
-                <input id="number" required placeholder="123">
+                <input id="number" readonly placeholder="يتم توليده تلقائيا">
               </div>
               <div class="field">
                 <label>اسم المنتج</label>
-                <input id="name" required>
+                <input id="name" placeholder="اختياري - سيظهر اسم الفئة تلقائيا">
               </div>
               <div class="field">
                 <label>العيار</label>
                 <input id="carat" placeholder="عيار 24">
               </div>
               <div class="field">
-                <label>السعر</label>
-                <input id="price" type="number" required min="0">
+                <label>السعر الرسمي</label>
+                <input id="price" type="number" min="0">
               </div>
               <div class="field">
-                <label>سعر الخصم</label>
-                <input id="salePrice" type="number" min="0" placeholder="اختياري">
+                <label>سعر العرض</label>
+                <input id="salePrice" type="number" min="0" placeholder="اختياري - الرسمي يزيد 300 ج.م">
               </div>
               <div class="field">
                 <label>تاريخ انتهاء العرض</label>
@@ -231,14 +235,22 @@
                   <option value="false">غير مسموح</option>
                 </select>
               </div>
+              <div class="field">
+                <label>تمييز المنتج</label>
+                <label class="check-field"><input id="isBestSeller" type="checkbox"> الأكثر طلبًا</label>
+              </div>
               <div class="field full-width">
                 <label>الوصف</label>
-                <textarea id="description" rows="4" required></textarea>
+                <textarea id="description" rows="6" placeholder="يمكن كتابة الوصف في عدة أسطر"></textarea>
               </div>
               <div class="field full-width">
                 <label>صور المنتج (حتى 8 صور)</label>
                 <input id="images" type="file" accept="image/*" multiple>
                 <div class="preview-grid" id="imagePreview"></div>
+              </div>
+              <div class="field full-width bulk-upload-field">
+                <label class="check-field"><input id="bulkMode" type="checkbox"> إنشاء صنف مستقل من كل صورة مختارة</label>
+                <small>سيستخدم كل صنف البيانات المكتوبة هنا ويحصل تلقائيا على رقم جديد داخل الفئة.</small>
               </div>
             </div>
             <button class="btn" type="submit">حفظ المنتج</button>

@@ -151,7 +151,7 @@ function hasRemoteProductAssets(products) {
 function normalizeProduct(product = {}) {
   return {
     ...product,
-    name: product.name || 'منتج',
+    name: product.name || '',
     carat: product.carat || 'عيار 24',
     price: Number(product.price || 0),
     salePrice: product.salePrice === '' || product.salePrice === null || typeof product.salePrice === 'undefined'
@@ -162,6 +162,11 @@ function normalizeProduct(product = {}) {
     pickup: product.pickup || 'استلام من الفرع',
     description: product.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'
   };
+}
+
+function productDisplayName(product) {
+  const category = currentCategories.find((item) => item.id === product.category);
+  return product.name || category?.name || 'منتجات';
 }
 
 function loadSavedProducts() {
@@ -259,7 +264,7 @@ function renderCategories(categories) {
   if (!container) return;
 
   currentCategories = Array.isArray(categories) ? categories : [];
-  const icons = ['fa-solid fa-ring', 'fa-solid fa-link', 'fa-solid fa-gem', 'fa-regular fa-gem', 'fa-solid fa-layer-group', 'fa-solid fa-star', 'fa-solid fa-bars-staggered', 'fa-solid fa-coins', 'fa-solid fa-heart', 'fa-regular fa-clock'];
+  const icons = ['fa-solid fa-ring', 'fa-solid fa-link', 'fa-solid fa-gem', 'fa-regular fa-gem', 'fa-solid fa-layer-group', 'fa-solid fa-heart', 'fa-solid fa-star', 'fa-solid fa-bars-staggered', 'fa-solid fa-coins', 'fa-solid fa-heart', 'fa-regular fa-clock'];
 
   const populatedCategories = currentCategories.filter((category) => {
     return all.some((product) => product.category === category.id);
@@ -304,7 +309,7 @@ function renderCategories(categories) {
                 <article class="mini-product" data-detail="${product.id}" title="${product.name}">
                   <img src="${images[0] || FALLBACK_IMAGE}" alt="${product.name}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
                   <div class="mini-product-body">
-                    <h4>${product.name}</h4>
+                    <h4>${productDisplayName(product)}</h4>
                     <p>${money(price)}</p>
                   </div>
                 </article>
@@ -362,7 +367,7 @@ function renderProducts(items) {
             <span class="tag">${normalized.availability || 'متوفر'}</span>
             <span class="tag">${normalized.shipping || 'متوفر شحن'}</span>
           </div>
-          <h3>${normalized.name}</h3>
+                  <h3>${productDisplayName(normalized)}${normalized.isBestSeller ? ' <span class="best-seller-badge">الأكثر طلبًا</span>' : ''}</h3>
           <p class="desc">${normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'}</p>
           <div class="price">
             ${money(price)}
@@ -428,7 +433,7 @@ function renderCategoryPage() {
             <span class="tag">${normalized.availability || 'متوفر'}</span>
             <span class="tag">${normalized.shipping || 'متوفر شحن'}</span>
           </div>
-          <h3>${normalized.name}</h3>
+          <h3>${productDisplayName(normalized)}${normalized.isBestSeller ? ' <span class="best-seller-badge">الأكثر طلبًا</span>' : ''}</h3>
           <p class="desc">${normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'}</p>
           <div class="price">
             ${money(price)}
@@ -620,6 +625,7 @@ function showDetail(product) {
   if (!product) return;
   const normalized = normalizeProduct(product);
   const images = productImages(normalized);
+  const displayName = productDisplayName(normalized);
   const detailImage = $('#detailImage');
   const detailGallery = $('#detailGallery');
   const detailTags = $('#detailTags');
@@ -628,6 +634,9 @@ function showDetail(product) {
   const detailStock = $('#detailStock');
 
   if (!detailImage || !detailGallery || !detailTags || !detailDescription || !detailPrice || !detailStock) return;
+
+  const detailTitle = $('#detailTitle');
+  if (detailTitle) detailTitle.textContent = displayName;
 
   stopDetailImageSlider();
   detailImage.src = images[0] || FALLBACK_IMAGE;

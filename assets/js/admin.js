@@ -5,6 +5,37 @@ let selectedFiles = [];
 let editingImagePaths = [];
 let deletedImagePaths = [];
 
+const categoryRanges = {
+  rings: [1000, 1990], necklaces: [2000, 2999], bracelets: [3000, 3999], earrings: [4000, 4999],
+  sets: [5000, 5999], 'wedding-sets': [6000, 6999], 'italian-gold': [7000, 7999], ingots: [8000, 8999],
+  coins: [9000, 9999], pendants: [10000, 10999], watches: [11000, 11999]
+};
+
+const categoryNames = {
+  rings: 'خواتم', necklaces: 'سلاسل', bracelets: 'أساور', earrings: 'أقراط', sets: 'أطقم',
+  'wedding-sets': 'أطقم الأفراح والخطوبة', 'italian-gold': 'ذهب إيطالي', ingots: 'سبائك',
+  coins: 'عملات ذهبية', pendants: 'دلايات الذهب', watches: 'ساعات'
+};
+
+function categoryName(category) {
+  return categoryNames[category] || category || 'منتجات';
+}
+
+function nextProductNumber(category, list = products) {
+  const range = categoryRanges[category] || [1, 999999];
+  const used = list
+    .filter((product) => product.category === category)
+    .map((product) => Number(String(product.id || '').split('-').slice(1).join('-')))
+    .filter((number) => Number.isInteger(number) && number >= range[0] && number <= range[1]);
+  const next = Math.max(range[0] - 1, ...used) + 1;
+  if (next > range[1]) throw new Error(`اكتمل نطاق أرقام فئة ${categoryName(category)}.`);
+  return String(next);
+}
+
+function syncGeneratedNumber() {
+  if (!editing) $('#number').value = nextProductNumber($('#category').value);
+}
+
 const loginStorageKey = 'reginaAdminSession';
 const storeConfigKey = 'reginaStoreConfig';
 
@@ -143,7 +174,7 @@ function renderInventory() {
   box.innerHTML = filteredProducts.length ? filteredProducts.map((product) => `
     <article class="item">
       <img src="${imageUrl(images(product)[0])}" alt="${product.name}">
-      <h3>${product.name}</h3>
+      <h3>${product.name || categoryName(product.category)}${product.isBestSeller ? ' · الأكثر طلبًا' : ''}</h3>
       <small>${product.carat || ''} · ${product.price || 0} ج.م · ${product.availability || ''}</small>
       <div class="item-actions">
         <button class="btn edit" data-id="${product.id}" type="button">تعديل</button>
@@ -394,6 +425,8 @@ function edit(id) {
     if (el) el.value = product[key] ?? '';
   });
   $('#customOrder').value = String(product.customOrder ?? true);
+  $('#isBestSeller').checked = Boolean(product.isBestSeller);
+  $('#bulkMode').checked = false;
   $('#imagePreview').innerHTML = '';
   selectedFiles = [];
   deletedImagePaths = [];
@@ -409,8 +442,18 @@ $('#resetForm').onclick = () => {
   selectedFiles = [];
   editingImagePaths = [];
   deletedImagePaths = [];
+  $('#isBestSeller').checked = false;
+  $('#bulkMode').checked = false;
   $('#formTitle').textContent = 'إضافة صنف جديد';
+  syncGeneratedNumber();
 };
+
+$('#category').addEventListener('change', syncGeneratedNumber);
+$('#salePrice').addEventListener('input', () => {
+  const salePrice = Number($('#salePrice').value);
+  $('#price').value = salePrice > 0 ? String(salePrice + 300) : '';
+});
+syncGeneratedNumber();
 
 async function sendTelegramProductUpdate(productName, action) {
   const token = $('#telegramToken').value.trim();
@@ -442,84 +485,82 @@ $('#productForm').onsubmit = async (event) => {
     }
 
     const category = $('#category').value;
-    const num = $('#number').value.trim();
-    if (!/^\d+$/.test(num)) {
-      throw new Error('رقم الصنف يجب أن يحتوي أرقاما فقط.');
-    }
-
-    const id = `${category}-${num}`;
-    const base = `products/${category}/${num}`;
     const originalId = editing && editing.id ? editing.id : null;
-    const existingPaths = editing && editing.id === id ? [...editingImagePaths] : [];
-    const files = Array.from($('#images').files || []).slice(0, 8);
-
-    msg('جار حفظ المنتج…');
-
-    for (const file of files) {
-      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
-      const path = `${base}/${Date.now()}-${safeName}`;
-      await put(path, await readFileAsBase64(file), `Upload image for ${id}`);
-      existingPaths.push(path);
-    }
-
-    const finalPaths = [...new Set(existingPaths.filter(Boolean))];
-    for (const removedPath of [...new Set(deletedImagePaths)]) {
-      if (removedPath && !finalPaths.includes(removedPath)) {
-        await deleteGitHubFile(removedPath);
-      }
-    }
-
-    if (!finalPaths.length) {
-      throw new Error('أضف صورة واحدة على الأقل.');
-    }
-
-    const product = {
-      id,
-      name: $('#name').value.trim(),
-      carat: $('#carat').value,
-      price: Number($('#price').value),
-      salePrice: $('#salePrice').value === '' ? '' : Number($('#salePrice').value),
-      saleEnds: $('#saleEnds').value,
-      manufacturing: $('#manufacturing').value === '' ? '' : Number($('#manufacturing').value),
-      weight: $('#weight').value,
-      availability: $('#availability').value,
-      shipping: $('#shipping').value,
-      customOrder: $('#customOrder').value === 'true',
-      description: $('#description').value.trim(),
-      category,
-      image: finalPaths[0],
-      images: finalPaths
-    };
-
-    await put(`${base}/product.json`, encodeJson(product), `Save ${id}`);
-
+    const bulkMode = !editing && $('#bulkMode').checked;
+    const files = selectedFiles.slice(0, 8);
     const current = await getList();
     const baseList = Array.isArray(current.list) ? current.list : [];
-    const mergedList = baseList.filter((item) => item.id !== originalId && item.id !== id);
-    mergedList.push(product);
-    products = mergedList;
-    persistProductsLocal(products);
-    if (current.sha && getToken()) {
-      await saveList(mergedList, current.sha, `Publish ${product.name}`);
+    const name = $('#name').value.trim() || categoryName(category);
+    const salePrice = $('#salePrice').value === '' ? '' : Number($('#salePrice').value);
+    const officialPrice = salePrice === '' ? Number($('#price').value || 0) : salePrice + 300;
+
+    if (!officialPrice || officialPrice < 0) throw new Error('أدخل السعر الرسمي أو سعر العرض.');
+    if ((bulkMode || !editing) && !files.length) throw new Error('أضف صورة واحدة على الأقل.');
+    if (editing && !editingImagePaths.length && !files.length) throw new Error('أضف صورة واحدة على الأقل.');
+
+    msg(bulkMode ? 'جار رفع الأصناف…' : 'جار حفظ المنتج…');
+
+    const entries = [];
+    let numberList = [...baseList];
+    const entryCount = bulkMode ? files.length : 1;
+    for (let index = 0; index < entryCount; index += 1) {
+      const number = originalId && category === editing.category
+        ? originalId.split('-').slice(1).join('-')
+        : nextProductNumber(category, numberList);
+      const id = `${category}-${number}`;
+      const base = `products/${category}/${number}`;
+      const existingPaths = originalId && id === originalId ? [...editingImagePaths] : [];
+      const entryFiles = bulkMode ? [files[index]] : files;
+
+      for (const file of entryFiles) {
+        const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+        const path = `${base}/${Date.now()}-${index}-${safeName}`;
+        await put(path, await readFileAsBase64(file), `Upload image for ${id}`);
+        existingPaths.push(path);
+      }
+
+      const finalPaths = [...new Set(existingPaths.filter(Boolean))];
+      if (!finalPaths.length) throw new Error('أضف صورة واحدة على الأقل.');
+      const product = {
+        id, name, carat: $('#carat').value, price: officialPrice, salePrice,
+        saleEnds: $('#saleEnds').value,
+        manufacturing: $('#manufacturing').value === '' ? '' : Number($('#manufacturing').value),
+        weight: $('#weight').value.trim(), availability: $('#availability').value,
+        shipping: $('#shipping').value, customOrder: $('#customOrder').value === 'true',
+        isBestSeller: $('#isBestSeller').checked, description: $('#description').value,
+        category, image: finalPaths[0], images: finalPaths
+      };
+
+      await put(`${base}/product.json`, encodeJson(product), `Save ${id}`);
+      entries.push({ product, finalPaths });
+      numberList.push(product);
     }
 
-    if (originalId && originalId !== id) {
-      const oldBase = `products/${originalId.split('-')[0]}/${originalId.split('-').slice(1).join('-')}`;
-      try {
+    const savedIds = entries.map(({ product }) => product.id);
+    const mergedList = baseList.filter((item) => item.id !== originalId && !savedIds.includes(item.id));
+    entries.forEach(({ product }) => mergedList.push(product));
+    products = mergedList;
+    persistProductsLocal(products);
+    if (current.sha && getToken()) await saveList(mergedList, current.sha, `Publish ${entries.length} product(s)`);
+
+    if (originalId) {
+      for (const removedPath of [...new Set(deletedImagePaths)]) {
+        if (removedPath && !entries[0].finalPaths.includes(removedPath)) await deleteGitHubFile(removedPath);
+      }
+
+      if (entries[0].product.id !== originalId) {
         const oldProduct = baseList.find((item) => item.id === originalId);
-        if (oldProduct && Array.isArray(oldProduct.images)) {
-          for (const oldImage of oldProduct.images) {
-            if (oldImage && !finalPaths.includes(oldImage)) {
-              await deleteGitHubFile(oldImage);
-            }
+        if (oldProduct) {
+          const oldBase = `products/${oldProduct.category}/${originalId.split('-').slice(1).join('-')}`;
+          await deleteGitHubFile(`${oldBase}/product.json`);
+          for (const oldImage of images(oldProduct)) {
+            if (oldImage && !oldImage.startsWith('http')) await deleteGitHubFile(oldImage);
           }
         }
-      } catch {
-        // ignore cleanup failures for old product directory
       }
     }
 
-    await sendTelegramProductUpdate(product.name, editing ? 'تعديل' : 'إضافة');
+    await sendTelegramProductUpdate(name, bulkMode ? `إضافة ${entries.length} أصناف` : (editing ? 'تعديل' : 'إضافة'));
 
     editing = null;
     editingImagePaths = [];
@@ -528,6 +569,7 @@ $('#productForm').onsubmit = async (event) => {
     $('#imagePreview').innerHTML = '';
     selectedFiles = [];
     $('#formTitle').textContent = 'إضافة صنف جديد';
+    syncGeneratedNumber();
     renderInventory();
     msg('تم الحفظ والنشر بنجاح.');
   } catch (error) {

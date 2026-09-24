@@ -983,8 +983,18 @@ img { max-width: 100%; display: block; }
 }
 
 #detailTags { margin-bottom: 14px; }
-#detailDescription { color: var(--muted); line-height: 1.9; }
+#detailDescription { color: var(--muted); line-height: 1.9; white-space: pre-line; }
 #detailPrice { margin: 16px 0; }
+
+.desc { white-space: pre-line; }
+
+.best-seller-badge {
+  display: inline-block;
+  color: var(--highlight);
+  font-size: .72em;
+  margin-inline-start: 6px;
+  white-space: nowrap;
+}
 
 .reveal {
   opacity: 0;
