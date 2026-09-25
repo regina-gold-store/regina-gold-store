@@ -1,7 +1,7 @@
 {
   "id": "rings-1013",
   "name": "خواتم",
-  "carat": "18",
+  "carat": "",
   "price": 8900,
   "salePrice": 8600,
   "saleEnds": "",
@@ -12,9 +12,9 @@
   "customOrder": true,
   "description": "",
   "category": "rings",
-  "image": "products/rings/1013/1790320135645-0-063--2-.jpg",
+  "image": "products/rings/1013/1790320141514-0-063--2-.jpg",
   "images": [
-    "products/rings/1013/1790320135645-0-063--2-.jpg",
-    "products/rings/1013/1790320137626-0-063.jpg"
+    "products/rings/1013/1790320141514-0-063--2-.jpg",
+    "products/rings/1013/1790320143276-0-063.jpg"
   ]
 }
