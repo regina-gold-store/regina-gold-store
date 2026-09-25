@@ -12,7 +12,7 @@ const categoryRanges = {
 };
 
 const categoryNames = {
-  rings: 'خواتم', necklaces: 'سلاسل', bracelets: 'أساور', earrings: 'أقراط', sets: 'أطقم',
+  rings: 'خواتم', necklaces: 'سلاسل', bracelets: 'أساور', earrings: 'حلقان', sets: 'أطقم',
   'wedding-sets': 'أطقم الأفراح والخطوبة', 'italian-gold': 'ذهب إيطالي', ingots: 'سبائك',
   coins: 'عملات ذهبية', pendants: 'دلايات الذهب', watches: 'ساعات'
 };
