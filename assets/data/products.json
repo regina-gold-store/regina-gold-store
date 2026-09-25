@@ -713,5 +713,24 @@
       "products/rings/1020/1790320779608-0-008--2-.jpg",
       "products/rings/1020/1790320781426-0-008.jpg"
     ]
+  },
+  {
+    "id": "rings-1021",
+    "name": "خواتم",
+    "carat": "21",
+    "price": 13300,
+    "salePrice": 13000,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "2",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "ربع جينه ذهب",
+    "category": "rings",
+    "image": "products/rings/1021/1790320944256-0-056--2-.jpg",
+    "images": [
+      "products/rings/1021/1790320944256-0-056--2-.jpg"
+    ]
   }
 ]
