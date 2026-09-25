@@ -715,8 +715,8 @@
     ]
   },
   {
-    "id": "rings-1021",
-    "name": "خواتم",
+    "id": "coins-9000",
+    "name": "ربع جنيه ذهب",
     "carat": "21",
     "price": 13300,
     "salePrice": 13000,
@@ -727,10 +727,10 @@
     "shipping": "متوفر شحن",
     "customOrder": true,
     "description": "ربع جينه ذهب",
-    "category": "rings",
-    "image": "products/rings/1021/1790320944256-0-056--2-.jpg",
+    "category": "coins",
+    "image": "products/coins/9000/1790320998399-0-056--2-.jpg",
     "images": [
-      "products/rings/1021/1790320944256-0-056--2-.jpg"
+      "products/coins/9000/1790320998399-0-056--2-.jpg"
     ]
   }
 ]
