@@ -678,5 +678,25 @@
       "products/pendants/10000/1790321452257-0-001--2-.jpg",
       "products/pendants/10000/1790321455512-0-001.jpg"
     ]
+  },
+  {
+    "id": "pendants-10001",
+    "name": "دلايات الذهب",
+    "carat": "18",
+    "price": 8300,
+    "salePrice": 8000,
+    "saleEnds": "",
+    "manufacturing": "",
+    "weight": "",
+    "availability": "متوفر",
+    "shipping": "متوفر شحن",
+    "customOrder": true,
+    "description": "متاح جميع انواع الدلايات و الحروف ب اسعار تبدا من 8000",
+    "category": "pendants",
+    "image": "products/pendants/10001/1790321487031-0-004--2-.jpg",
+    "images": [
+      "products/pendants/10001/1790321487031-0-004--2-.jpg",
+      "products/pendants/10001/1790321488992-0-004.jpg"
+    ]
   }
 ]
