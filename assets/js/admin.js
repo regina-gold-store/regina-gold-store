@@ -109,6 +109,41 @@ async function getList() {
   return { list: decodeJson(data.content), sha: data.sha };
 }
 
+function formatBytes(bytes) {
+  if (!bytes) return '0 بايت';
+  const units = ['بايت', 'KB', 'MB', 'GB'];
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < units.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+  return `${value.toFixed(unit ? 2 : 0)} ${units[unit]}`;
+}
+
+async function loadRepositoryStats() {
+  if (!getToken()) {
+    $('#statsSource').textContent = 'المصدر: أدخل GitHub Token لعرض إحصائيات المستودع';
+    return;
+  }
+
+  try {
+    const tree = await api(`${getRoot()}git/trees/main?recursive=1`);
+    const entries = Array.isArray(tree.tree) ? tree.tree : [];
+    const productFiles = entries.filter((entry) => entry.path.startsWith('products/') && entry.type === 'blob');
+    const imageFiles = productFiles.filter((entry) => /\.(png|jpe?g|webp|gif|avif)$/i.test(entry.path));
+    const productJsonFiles = productFiles.filter((entry) => entry.path.endsWith('/product.json'));
+    const bytes = productFiles.reduce((sum, entry) => sum + Number(entry.size || 0), 0);
+    $('#statsProducts').textContent = String(products.length);
+    $('#statsImages').textContent = String(imageFiles.length);
+    $('#statsFiles').textContent = String(productFiles.length);
+    $('#statsStorage').textContent = formatBytes(bytes);
+    $('#statsSource').textContent = `المصدر: GitHub · ${productJsonFiles.length} ملفات بيانات منتجات منشورة`;
+  } catch (error) {
+    $('#statsSource').textContent = `تعذر تحميل إحصائيات GitHub: ${error.message}`;
+  }
+}
+
 async function saveList(list, sha, message) {
   await api(getRoot() + 'assets/data/products.json', 'PUT', {
     message,
@@ -404,6 +439,7 @@ $('#loadProducts').onclick = async () => {
     products = Array.isArray(result.list) ? result.list : [];
     persistProductsLocal(products);
     renderInventory();
+    await loadRepositoryStats();
     msg('تم تحميل المنتجات.');
   } catch (error) {
     products = [];
@@ -542,6 +578,7 @@ $('#productForm').onsubmit = async (event) => {
     products = mergedList;
     persistProductsLocal(products);
     if (current.sha && getToken()) await saveList(mergedList, current.sha, `Publish ${entries.length} product(s)`);
+    await loadRepositoryStats();
 
     if (originalId) {
       for (const removedPath of [...new Set(deletedImagePaths)]) {
@@ -592,6 +629,7 @@ async function remove(id) {
     if (current.sha && getToken()) {
       await saveList(remoteNext, current.sha, `Remove ${id}`);
       msg('تم حذف الصنف من المتجر.');
+      await loadRepositoryStats();
     } else {
       msg('تم حذف المنتج محليًا، وسيتم تحديث المستودع عند إدخال بيانات GitHub الصحيحة.');
     }
@@ -660,6 +698,7 @@ function exportProductsWorkbook() {
 $('#saveStoreConfig').onclick = saveStoreConfig;
 $('#exportProductsExcel').onclick = exportProductsWorkbook;
 $('#adminProductSearch').oninput = renderInventory;
+$('#refreshStats').onclick = loadRepositoryStats;
 
 $('#clearProducts').onclick = async () => {
   if (!confirm('هل تريد حذف جميع المنتجات من المتجر؟')) return;
@@ -674,6 +713,7 @@ $('#clearProducts').onclick = async () => {
     const remoteNext = [];
     if (current.sha && getToken()) {
       await saveList(remoteNext, current.sha, 'Clear all products');
+      await loadRepositoryStats();
     }
   } catch (error) {
     msg(`تم حذف المنتجات من الواجهة لكن لم يتم تحديث المستودع: ${error.message}`, true);
@@ -686,5 +726,6 @@ window.onload = async () => {
   await loadStoreConfig();
   if ($('#admin') && !$('#admin').classList.contains('hidden')) {
     $('#loadProducts').click();
+    loadRepositoryStats();
   }
 };

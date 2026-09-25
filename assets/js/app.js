@@ -35,6 +35,32 @@ let cart = [];
 let storeConfig = { ...DEFAULT_STORE };
 let currentCategories = [];
 let detailSliderTimer = null;
+let productCardSliderTimers = [];
+
+function stopProductCardSliders() {
+  productCardSliderTimers.forEach((timer) => clearInterval(timer));
+  productCardSliderTimers = [];
+}
+
+function startProductCardSliders(selector = '.mini-product, .card') {
+  stopProductCardSliders();
+  document.querySelectorAll(selector).forEach((card) => {
+    const product = all.find((item) => item.id === card.dataset.detail);
+    const sources = product ? productImages(product) : [];
+    const image = card.querySelector('img');
+    if (!image || sources.length < 2) return;
+    let index = 0;
+    const timer = setInterval(() => {
+      index = (index + 1) % sources.length;
+      image.classList.add('image-changing');
+      window.setTimeout(() => {
+        image.src = sources[index] || FALLBACK_IMAGE;
+        image.classList.remove('image-changing');
+      }, 180);
+    }, 500);
+    productCardSliderTimers.push(timer);
+  });
+}
 
 function stopDetailImageSlider() {
   if (detailSliderTimer) {
@@ -341,6 +367,7 @@ function renderCategories(categories) {
   document.querySelectorAll('.mini-product').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
+  startProductCardSliders();
 }
 
 function renderProducts(items) {
@@ -400,6 +427,7 @@ function renderProducts(items) {
   document.querySelectorAll('[data-detail]').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
+  startProductCardSliders();
 }
 
 function renderCategoryPage() {
@@ -466,6 +494,7 @@ function renderCategoryPage() {
   document.querySelectorAll('[data-detail]').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
+  startProductCardSliders();
 }
 
 function updateSearchSuggestions() {
@@ -613,6 +642,35 @@ async function shareProduct(product) {
   }
 }
 
+function renderRelatedProducts(product) {
+  const relatedRoot = $('#detailRelated');
+  if (!relatedRoot) return;
+
+  const bestSellers = all.filter((item) => item.isBestSeller && item.id !== product.id);
+  const sameCategory = all.filter((item) => item.category === product.category && item.id !== product.id);
+  const related = [...bestSellers, ...sameCategory].filter((item, index, list) => list.findIndex((candidate) => candidate.id === item.id) === index).slice(0, 4);
+
+  relatedRoot.innerHTML = related.length ? `
+    <div class="related-heading">
+      <h3>${bestSellers.length ? 'الأكثر طلبًا ومنتجات ذات صلة' : 'منتجات ذات صلة'}</h3>
+    </div>
+    <div class="related-grid">
+      ${related.map((item) => {
+        const relatedImages = productImages(item);
+        return `<button class="related-item" type="button" data-related-id="${item.id}">
+          <img src="${relatedImages[0] || FALLBACK_IMAGE}" alt="${productDisplayName(item)}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
+          <span>${productDisplayName(item)}</span>
+          ${item.isBestSeller ? '<small>الأكثر طلبًا</small>' : ''}
+        </button>`;
+      }).join('')}
+    </div>
+  ` : '<p class="related-empty">لا توجد منتجات ذات صلة حاليًا.</p>';
+
+  relatedRoot.querySelectorAll('[data-related-id]').forEach((button) => {
+    button.onclick = () => showDetail(all.find((item) => item.id === button.dataset.relatedId));
+  });
+}
+
 function showDetail(product) {
   if (!product) return;
   const normalized = normalizeProduct(product);
@@ -659,6 +717,7 @@ function showDetail(product) {
   `;
 
   detailDescription.textContent = normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.';
+    renderRelatedProducts(normalized);
   const currentPrice = salePrice(normalized);
   const old = Number(normalized.price || 0) > Number(currentPrice || 0) ? ` <span class="old-price">${money(normalized.price)}</span>` : '';
   detailPrice.innerHTML = `${money(currentPrice)}${old}`;

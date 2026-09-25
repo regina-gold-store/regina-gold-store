@@ -22,6 +22,13 @@
     .check-field { display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .check-field input { width: auto; }
     .bulk-upload-field small { color: var(--muted); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .stat-card { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: rgba(255,255,255,.03); }
+    .stat-card strong, .stat-card span { display: block; }
+    .stat-card strong { color: var(--goldlite); font-size: 1.45rem; margin-bottom: 6px; }
+    .stat-card span, .stats-source { color: var(--muted); }
+    .stats-source { margin: 12px 0 0; font-size: .85rem; }
+    @media (max-width: 700px) { .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     .field input, .field select, .field textarea {
       width: 100%; border: 1px solid var(--line); background: rgba(255,255,255,.01); color: var(--text);
       border-radius: 14px; padding: 12px 14px; outline: none; transition: border-color .2s ease, box-shadow .2s ease;
@@ -256,6 +263,22 @@
             <button class="btn" type="submit">حفظ المنتج</button>
           </form>
           <div id="status" class="status"></div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-top:20px;">
+        <div class="panel-body">
+          <div class="toolbar">
+            <h3>إحصائيات المتجر</h3>
+            <button class="btn ghost" id="refreshStats" type="button">تحديث الإحصائيات</button>
+          </div>
+          <div class="stats-grid" id="adminStats">
+            <div class="stat-card"><strong id="statsProducts">—</strong><span>عدد الأصناف</span></div>
+            <div class="stat-card"><strong id="statsImages">—</strong><span>عدد الصور</span></div>
+            <div class="stat-card"><strong id="statsFiles">—</strong><span>ملفات المنتجات</span></div>
+            <div class="stat-card"><strong id="statsStorage">—</strong><span>المساحة المستخدمة</span></div>
+          </div>
+          <p class="stats-source" id="statsSource">المصدر: GitHub</p>
         </div>
       </div>
 
