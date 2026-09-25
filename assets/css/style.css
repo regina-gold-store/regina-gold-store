@@ -999,65 +999,6 @@ img { max-width: 100%; display: block; }
 
 .desc { white-space: pre-line; }
 
-.best-seller-badge {
-
-  .related-products {
-    margin: 22px 0 8px;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-  }
-
-  .related-heading h3 {
-    margin: 0 0 12px;
-    font-size: 1.05rem;
-  }
-
-  .related-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .related-item {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--card);
-    color: var(--text);
-    padding: 6px;
-    text-align: right;
-    cursor: pointer;
-    font: inherit;
-  }
-
-  .related-item img {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 8px;
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  .related-item span, .related-item small {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .related-item small { color: var(--goldlite); margin-top: 3px; }
-  .related-empty { color: var(--muted); margin: 0; }
-
-  @media (max-width: 620px) {
-    .related-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  }
-  display: inline-block;
-  color: var(--highlight);
-  font-size: .72em;
-  margin-inline-start: 6px;
-  white-space: nowrap;
-}
-
 .reveal {
   opacity: 0;
   transform: translateY(24px);

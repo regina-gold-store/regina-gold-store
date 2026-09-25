@@ -209,7 +209,7 @@ function renderInventory() {
   box.innerHTML = filteredProducts.length ? filteredProducts.map((product) => `
     <article class="item">
       <img src="${imageUrl(images(product)[0])}" alt="${product.name}">
-      <h3>${product.name || categoryName(product.category)}${product.isBestSeller ? ' · الأكثر طلبًا' : ''}</h3>
+      <h3>${product.name || categoryName(product.category)}</h3>
       <small>${product.carat || ''} · ${product.price || 0} ج.م · ${product.availability || ''}</small>
       <div class="item-actions">
         <button class="btn edit" data-id="${product.id}" type="button">تعديل</button>
@@ -461,7 +461,6 @@ function edit(id) {
     if (el) el.value = product[key] ?? '';
   });
   $('#customOrder').value = String(product.customOrder ?? true);
-  $('#isBestSeller').checked = Boolean(product.isBestSeller);
   $('#bulkMode').checked = false;
   $('#imagePreview').innerHTML = '';
   selectedFiles = [];
@@ -478,7 +477,6 @@ $('#resetForm').onclick = () => {
   selectedFiles = [];
   editingImagePaths = [];
   deletedImagePaths = [];
-  $('#isBestSeller').checked = false;
   $('#bulkMode').checked = false;
   $('#formTitle').textContent = 'إضافة صنف جديد';
   syncGeneratedNumber();
@@ -563,7 +561,7 @@ $('#productForm').onsubmit = async (event) => {
         manufacturing: $('#manufacturing').value === '' ? '' : Number($('#manufacturing').value),
         weight: $('#weight').value.trim(), availability: $('#availability').value,
         shipping: $('#shipping').value, customOrder: $('#customOrder').value === 'true',
-        isBestSeller: $('#isBestSeller').checked, description: $('#description').value,
+        description: $('#description').value,
         category, image: finalPaths[0], images: finalPaths
       };
 

@@ -394,7 +394,7 @@ function renderProducts(items) {
             <span class="tag">${normalized.availability || 'متوفر'}</span>
             <span class="tag">${normalized.shipping || 'متوفر شحن'}</span>
           </div>
-                  <h3>${productDisplayName(normalized)}${normalized.isBestSeller ? ' <span class="best-seller-badge">الأكثر طلبًا</span>' : ''}</h3>
+                  <h3>${productDisplayName(normalized)}</h3>
           <p class="desc">${normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'}</p>
           <div class="price">
             ${money(price)}
@@ -461,7 +461,7 @@ function renderCategoryPage() {
             <span class="tag">${normalized.availability || 'متوفر'}</span>
             <span class="tag">${normalized.shipping || 'متوفر شحن'}</span>
           </div>
-          <h3>${productDisplayName(normalized)}${normalized.isBestSeller ? ' <span class="best-seller-badge">الأكثر طلبًا</span>' : ''}</h3>
+          <h3>${productDisplayName(normalized)}</h3>
           <p class="desc">${normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.'}</p>
           <div class="price">
             ${money(price)}
@@ -642,35 +642,6 @@ async function shareProduct(product) {
   }
 }
 
-function renderRelatedProducts(product) {
-  const relatedRoot = $('#detailRelated');
-  if (!relatedRoot) return;
-
-  const bestSellers = all.filter((item) => item.isBestSeller && item.id !== product.id);
-  const sameCategory = all.filter((item) => item.category === product.category && item.id !== product.id);
-  const related = [...bestSellers, ...sameCategory].filter((item, index, list) => list.findIndex((candidate) => candidate.id === item.id) === index).slice(0, 4);
-
-  relatedRoot.innerHTML = related.length ? `
-    <div class="related-heading">
-      <h3>${bestSellers.length ? 'الأكثر طلبًا ومنتجات ذات صلة' : 'منتجات ذات صلة'}</h3>
-    </div>
-    <div class="related-grid">
-      ${related.map((item) => {
-        const relatedImages = productImages(item);
-        return `<button class="related-item" type="button" data-related-id="${item.id}">
-          <img src="${relatedImages[0] || FALLBACK_IMAGE}" alt="${productDisplayName(item)}" loading="lazy" onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';">
-          <span>${productDisplayName(item)}</span>
-          ${item.isBestSeller ? '<small>الأكثر طلبًا</small>' : ''}
-        </button>`;
-      }).join('')}
-    </div>
-  ` : '<p class="related-empty">لا توجد منتجات ذات صلة حاليًا.</p>';
-
-  relatedRoot.querySelectorAll('[data-related-id]').forEach((button) => {
-    button.onclick = () => showDetail(all.find((item) => item.id === button.dataset.relatedId));
-  });
-}
-
 function showDetail(product) {
   if (!product) return;
   const normalized = normalizeProduct(product);
@@ -717,7 +688,6 @@ function showDetail(product) {
   `;
 
   detailDescription.textContent = normalized.description || 'لا يوجد وصف مضاف لهذا المنتج بعد.';
-    renderRelatedProducts(normalized);
   const currentPrice = salePrice(normalized);
   const old = Number(normalized.price || 0) > Number(currentPrice || 0) ? ` <span class="old-price">${money(normalized.price)}</span>` : '';
   detailPrice.innerHTML = `${money(currentPrice)}${old}`;
