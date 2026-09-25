@@ -1,0 +1,19 @@
+{
+  "id": "coins-9000",
+  "name": "ربع جنيه ذهب",
+  "carat": "21",
+  "price": 13300,
+  "salePrice": 13000,
+  "saleEnds": "",
+  "manufacturing": "",
+  "weight": "2",
+  "availability": "متوفر",
+  "shipping": "متوفر شحن",
+  "customOrder": true,
+  "description": "ربع جينه ذهب",
+  "category": "coins",
+  "image": "products/coins/9000/1790320998399-0-056--2-.jpg",
+  "images": [
+    "products/coins/9000/1790320998399-0-056--2-.jpg"
+  ]
+}
