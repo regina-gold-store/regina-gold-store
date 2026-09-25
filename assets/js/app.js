@@ -34,41 +34,6 @@ let all = [];
 let cart = [];
 let storeConfig = { ...DEFAULT_STORE };
 let currentCategories = [];
-let detailSliderTimer = null;
-
-function stopDetailImageSlider() {
-  if (detailSliderTimer) {
-    clearInterval(detailSliderTimer);
-    detailSliderTimer = null;
-  }
-}
-
-function startDetailImageSlider(images) {
-  stopDetailImageSlider();
-
-  if (!Array.isArray(images) || images.length < 2) return;
-
-  const detailImage = $('#detailImage');
-  const detailGallery = $('#detailGallery');
-  if (!detailImage || !detailGallery) return;
-
-  let activeIndex = 0;
-  const updateThumbs = () => {
-    const thumbs = detailGallery.querySelectorAll('img');
-    thumbs.forEach((thumb, index) => {
-      thumb.classList.toggle('active', index === activeIndex);
-      thumb.style.transform = index === activeIndex ? 'scale(1.02)' : 'scale(1)';
-    });
-  };
-
-  detailSliderTimer = setInterval(() => {
-    activeIndex = (activeIndex + 1) % images.length;
-    const nextImage = images[activeIndex] || FALLBACK_IMAGE;
-    detailImage.src = nextImage;
-    detailImage.onerror = () => { detailImage.src = FALLBACK_IMAGE; };
-    updateThumbs();
-  }, 2600);
-}
 
 function normalizeCatalog(list) {
   const arr = Array.isArray(list) ? list : [];
@@ -630,7 +595,6 @@ function showDetail(product) {
   const detailTitle = $('#detailTitle');
   if (detailTitle) detailTitle.textContent = displayName;
 
-  stopDetailImageSlider();
   detailImage.src = images[0] || FALLBACK_IMAGE;
   detailImage.onerror = () => { detailImage.src = FALLBACK_IMAGE; };
   detailGallery.innerHTML = images.map((src, index) => `
@@ -643,12 +607,8 @@ function showDetail(product) {
       detailImage.onerror = () => { detailImage.src = FALLBACK_IMAGE; };
       detailGallery.querySelectorAll('img').forEach((thumb) => thumb.classList.remove('active'));
       img.classList.add('active');
-      stopDetailImageSlider();
-      startDetailImageSlider(images);
     };
   });
-
-  startDetailImageSlider(images);
 
   detailTags.innerHTML = `
     <span class="tag">${formatDisplayValue(normalized.carat, 'carat') || 'عيار 24'}</span>
@@ -852,9 +812,6 @@ async function init() {
   closeButtons.forEach((button) => {
     button.onclick = () => {
       const overlay = button.closest('.overlay');
-      if (overlay && overlay.id === 'detailModal') {
-        stopDetailImageSlider();
-      }
       overlay?.classList.remove('show');
     };
   });

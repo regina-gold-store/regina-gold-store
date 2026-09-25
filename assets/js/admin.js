@@ -614,11 +614,10 @@ $('#productForm').onsubmit = async (event) => {
 
 async function remove(id) {
   if (!confirm('حذف هذا الصنف من المتجر')) return;
-
-  const next = products.filter((product) => product.id !== id);
-  products = next;
-  persistProductsLocal(products);
-  renderInventory();
+  if (!getToken()) {
+    msg('أدخلي GitHub Token قبل حذف المنتج حتى يتم الحذف للجميع.', true);
+    return;
+  }
 
   try {
     const current = await getList();
@@ -626,10 +625,11 @@ async function remove(id) {
 
     if (current.sha && getToken()) {
       await saveList(remoteNext, current.sha, `Remove ${id}`);
+      products = remoteNext;
+      persistProductsLocal(products);
+      renderInventory();
       msg('تم حذف الصنف من المتجر.');
       await loadRepositoryStats();
-    } else {
-      msg('تم حذف المنتج محليًا، وسيتم تحديث المستودع عند إدخال بيانات GitHub الصحيحة.');
     }
 
     await sendTelegramProductUpdate(id, 'حذف');
