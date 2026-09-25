@@ -35,32 +35,6 @@ let cart = [];
 let storeConfig = { ...DEFAULT_STORE };
 let currentCategories = [];
 let detailSliderTimer = null;
-let productCardSliderTimers = [];
-
-function stopProductCardSliders() {
-  productCardSliderTimers.forEach((timer) => clearInterval(timer));
-  productCardSliderTimers = [];
-}
-
-function startProductCardSliders(selector = '.mini-product, .card') {
-  stopProductCardSliders();
-  document.querySelectorAll(selector).forEach((card) => {
-    const product = all.find((item) => item.id === card.dataset.detail);
-    const sources = product ? productImages(product) : [];
-    const image = card.querySelector('img');
-    if (!image || sources.length < 2) return;
-    let index = 0;
-    const timer = setInterval(() => {
-      index = (index + 1) % sources.length;
-      image.classList.add('image-changing');
-      window.setTimeout(() => {
-        image.src = sources[index] || FALLBACK_IMAGE;
-        image.classList.remove('image-changing');
-      }, 600);
-    }, 2000);
-    productCardSliderTimers.push(timer);
-  });
-}
 
 function stopDetailImageSlider() {
   if (detailSliderTimer) {
@@ -367,7 +341,6 @@ function renderCategories(categories) {
   document.querySelectorAll('.mini-product').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
-  startProductCardSliders();
 }
 
 function renderProducts(items) {
@@ -427,7 +400,6 @@ function renderProducts(items) {
   document.querySelectorAll('[data-detail]').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
-  startProductCardSliders();
 }
 
 function renderCategoryPage() {
@@ -494,7 +466,6 @@ function renderCategoryPage() {
   document.querySelectorAll('[data-detail]').forEach((card) => {
     card.onclick = () => showDetail(all.find((product) => product.id === card.dataset.detail));
   });
-  startProductCardSliders();
 }
 
 function updateSearchSuggestions() {

@@ -414,15 +414,6 @@ img { max-width: 100%; display: block; }
   width: 100%;
   height: 160px;
   object-fit: cover;
-  transition: opacity .6s ease-in-out;
-}
-
-.card > img {
-  transition: opacity .6s ease-in-out;
-}
-
-.image-changing {
-  opacity: 0;
 }
 
 .mini-product-body {
