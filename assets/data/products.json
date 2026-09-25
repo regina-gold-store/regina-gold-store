@@ -19,25 +19,6 @@
     ]
   },
   {
-    "id": "bracelets-303",
-    "name": "إسورة ذهبية أنيقة",
-    "category": "bracelets",
-    "carat": "عيار 24",
-    "price": 7800,
-    "salePrice": 6500,
-    "saleEnds": "2099-12-31",
-    "manufacturing": 2024,
-    "weight": "7.1 غ",
-    "availability": "متوفر",
-    "shipping": "توصيل سريع",
-    "pickup": "استلام من الفرع",
-    "description": "إسورة ذهبية خفيفة ومريحة مع تصميم فخّم يناسب كل المناسبات.",
-    "image": "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80",
-    "images": [
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?auto=format&fit=crop&w=900&q=80"
-    ]
-  },
-  {
     "id": "bracelets-15",
     "name": "اساور",
     "carat": "‏18",
