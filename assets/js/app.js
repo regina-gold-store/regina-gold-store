@@ -56,8 +56,8 @@ function startProductCardSliders(selector = '.mini-product, .card') {
       window.setTimeout(() => {
         image.src = sources[index] || FALLBACK_IMAGE;
         image.classList.remove('image-changing');
-      }, 180);
-    }, 500);
+      }, 360);
+    }, 2000);
     productCardSliderTimers.push(timer);
   });
 }
