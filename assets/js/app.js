@@ -565,17 +565,62 @@ async function shareProduct(product) {
 
   const shareUrl = buildProductShareUrl(product);
   const title = product.name || productDisplayName(product);
+  const text = `تصفح ${title} من روجينا جولد`;
 
-  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(`تصفح ${title} من روجينا جولد` )}`;
-
-  try {
-    await navigator.clipboard.writeText(shareUrl);
-    window.open(facebookUrl, '_blank', 'noopener,noreferrer,width=720,height=650');
-    alert('تم فتح مشاركة فيسبوك ونسخ رابط المنتج. ستظهر صورة المنتج تلقائيًا بعد نشره.');
-  } catch {
-    window.open(facebookUrl, '_blank', 'noopener,noreferrer,width=720,height=650');
-    alert('تم فتح نافذة مشاركة الفيسبوك. يمكنك نسخ الرابط يدويًا إذا لزم الأمر.');
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, text, url: shareUrl });
+      return;
+    } catch (error) {
+      if (error.name === 'AbortError') return;
+    }
   }
+
+  showShareOptions({ title, text, url: shareUrl });
+}
+
+function showShareOptions({ title, text, url }) {
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay show';
+  overlay.innerHTML = `
+    <div class="dialog share-dialog" role="dialog" aria-modal="true" aria-label="مشاركة المنتج">
+      <div class="dialog-head">
+        <h2>مشاركة ${title}</h2>
+        <button class="close" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <div class="share-options">
+        <button class="btn" type="button" data-share-target="facebook">فيسبوك</button>
+        <button class="btn" type="button" data-share-target="whatsapp">واتساب</button>
+        <button class="btn ghost" type="button" data-share-target="copy">نسخ الرابط</button>
+      </div>
+    </div>
+  `;
+
+  const close = () => overlay.remove();
+  overlay.querySelector('.close').onclick = close;
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) close();
+  });
+  overlay.querySelector('[data-share-target="facebook"]').onclick = () => {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`;
+    window.open(facebookUrl, '_blank', 'noopener,noreferrer');
+    close();
+  };
+  overlay.querySelector('[data-share-target="whatsapp"]').onclick = () => {
+    const message = `${text}\n${url}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
+    close();
+  };
+  overlay.querySelector('[data-share-target="copy"]').onclick = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      alert('تم نسخ رابط المنتج.');
+    } catch {
+      window.prompt('انسخ رابط المنتج:', url);
+    }
+    close();
+  };
+  document.body.appendChild(overlay);
 }
 
 function showDetail(product) {
